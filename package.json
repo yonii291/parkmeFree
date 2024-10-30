@@ -1,0 +1,15 @@
+{
+  "name": "parkme-free",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "start": "node ./bin/start"
+  },
+  "dependencies": {
+    "debug": "^4.3.4",
+    "express": "^4.21.0",
+    "http-errors": "^2.0.0",
+    "morgan": "^1.10.0"
+  }
+}

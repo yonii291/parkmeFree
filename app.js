@@ -4,6 +4,7 @@ import logger from "morgan";
 
 import indexRouter from "./routes/index.js";
 import usersRouter from "./routes/users.js";
+import parkingsRouter from "./routes/parkings.js";
 
 const app = express();
 
@@ -13,6 +14,11 @@ app.use(express.urlencoded({ extended: false }));
 
 app.use("/", indexRouter);
 app.use("/users", usersRouter);
+app.use("/login", usersRouter);
+app.use("/parks", usersRouter);
+app.use("/parkings", parkingsRouter);
+// mettre tous les routes objets
+
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {

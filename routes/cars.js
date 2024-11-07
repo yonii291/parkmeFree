@@ -1,9 +1,7 @@
-import express from "express";
-
 const router = express.Router();
 
 router.get("/", function (req, res, next) {
-  res.send("Ignition!");
+    res.send("Bienvenue sur la route de cars!");
 });
 
 export default router;

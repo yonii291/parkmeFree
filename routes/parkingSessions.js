@@ -1,4 +1,4 @@
-// import express from "express";
+
 
 // const router = express.Router();
 
@@ -7,60 +7,59 @@
 // });
 
 // export default router;
-
 import express from 'express';
-import { Park } from '../model/Park.js';
+import { ParkingSession } from '../model/ParkingSession.js';
 import authenticate from '../utils/auth.js';
 const router = express.Router();
 
-// Get all parks
+// Get all parking sessions
 router.get('/', function (req, res, next) {
-  Park.find().exec(function (err, parks) {
+  ParkingSession.find().exec(function (err, sessions) {
     if (err) {
       return next(err);
     }
-    res.status(200).send(parks);
+    res.status(200).send(sessions);
   });
 });
 
-// Get park by ID
+// Get parking session by ID
 router.get('/:id', function (req, res, next) {
-  Park.findOne({ _id: req.params.id }).exec(function (err, park) {
+  ParkingSession.findOne({ _id: req.params.id }).exec(function (err, session) {
     if (err) {
       return next(err);
     }
-    res.status(200).send(park);
+    res.status(200).send(session);
   });
 });
 
-// Create a new park
+// Create a new parking session
 router.post('/', authenticate, function (req, res, next) {
-  const newPark = new Park(req.body);
-  newPark.save(function (err, savedPark) {
+  const newSession = new ParkingSession(req.body);
+  newSession.save(function (err, savedSession) {
     if (err) {
       return next(err);
     }
-    res.status(201).send(savedPark);
+    res.status(201).send(savedSession);
   });
 });
 
-// Update a park by ID
+// Update parking session by ID
 router.put('/:id', authenticate, function (req, res, next) {
-  Park.findByIdAndUpdate(req.params.id, req.body, { new: true }).exec(function (err, updatedPark) {
+  ParkingSession.findByIdAndUpdate(req.params.id, req.body, { new: true }).exec(function (err, updatedSession) {
     if (err) {
       return next(err);
     }
-    res.status(200).send(updatedPark);
+    res.status(200).send(updatedSession);
   });
 });
 
-// Delete a park by ID
+// Delete parking session by ID
 router.delete('/:id', authenticate, function (req, res, next) {
-  Park.findByIdAndRemove(req.params.id).exec(function (err, removedPark) {
+  ParkingSession.findByIdAndRemove(req.params.id).exec(function (err, removedSession) {
     if (err) {
       return next(err);
     }
-    res.status(200).send(removedPark);
+    res.status(200).send(removedSession);
   });
 });
 

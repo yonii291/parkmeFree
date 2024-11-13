@@ -4,7 +4,8 @@ import logger from "morgan";
 
 import indexRouter from "./routes/index.js";
 import usersRouter from "./routes/users.js";
-import parkingsRouter from "./routes/parks.js";
+import parksRouter from "./routes/parks.js";
+import parkingSessionsRouter from "./routes/parkingSessions.js";
 import mongoose from 'mongoose';
 
 ///DATABASE CONNECTION
@@ -20,11 +21,12 @@ app.use(logger("dev"));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
-app.use("/", indexRouter);
 app.use("/users", usersRouter);
 app.use("/login", usersRouter);
-app.use("/parks", usersRouter);
-app.use("/parkings", parkingsRouter);
+app.use("/parks", parksRouter);
+app.use("/parkingSession", parkingSessionsRouter);
+app.use("/", indexRouter);
+
 // mettre tous les routes objets
 
 

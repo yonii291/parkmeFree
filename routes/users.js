@@ -25,22 +25,35 @@ router.post('/register', async (req, res,) => {
     await user.save();
     res.status(201).send(user);
   } catch (error) {
-    res.status
+    res.status(400).send('fuck')
   }
 });
+
 // Get all users
-router.get('/', authenticate, function (req, res, next) {
-  User.find().exec(function (err, users) {
-    if (err) {
-      return next(err);
-    }
+router.get('/allUsers', async function (req, res, next) {
+  try {
+    const users = await User.find().exec(); // Utilisation de await sans callback
     res.status(200).send(users);
-  });
+  } catch (err) {
+    next(err); // Gestion de l'erreur avec try/catch
+  }
 });
+
+// // Get all users
+// router.get('/allUsers', authenticate, async function (req, res, next) {
+//   try {
+//     const users = await User.find().exec(); // Utilisation de await sans callback
+//     res.status(200).send(users);
+//   } catch (err) {
+//     next(err); // Gestion de l'erreur avec try/catch
+//   }
+// });
 
 // Get user by ID
 router.get('/:id', authenticate, function (req, res, next) {
+
   User.findById(req.params.id).exec(function (err, user) {
+
     if (err) {
       return next(err);
     }
@@ -48,15 +61,27 @@ router.get('/:id', authenticate, function (req, res, next) {
   });
 });
 
+
 // Update user by ID
-router.put('/:id', authenticate, function (req, res, next) {
-  User.findByIdAndUpdate(req.params.id, req.body, { new: true }).exec(function (err, updatedUser) {
-    if (err) {
-      return next(err);
-    }
+router.put('/update/:id', async function (req, res, next) {
+  try {
+    const updatedUser = await User.findByIdAndUpdate(req.params.id, req.body, { new: true }).exec();
     res.status(200).send(updatedUser);
-  });
+  } catch (err) {
+    next(err); // Gestion de l'erreur avec try/catch
+  }
 });
+
+
+// // Update user by ID
+// router.put('/update/:id', authenticate, function (req, res, next) {
+//   User.findByIdAndUpdate(req.params.id, req.body, { new: true }).exec(function (err, updatedUser) {
+//     if (err) {
+//       return next(err);
+//     }
+//     res.status(200).send(updatedUser);
+//   });
+// });
 
 // Delete user by ID
 router.delete('/:id', authenticate, function (req, res, next) {

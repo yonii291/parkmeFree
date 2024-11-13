@@ -13,10 +13,21 @@
 // export default router;
 
 import express from 'express';
-import { User } from '../model/User.js';
+import User from '../model/User.js';
 import authenticate from '../utils/auth.js';
+
 const router = express.Router();
 
+// Create a new user
+router.post('/register', async (req, res,) => {
+  try {
+    const user = new User(req.body);
+    await user.save();
+    res.status(201).send(user);
+  } catch (error) {
+    res.status
+  }
+});
 // Get all users
 router.get('/', authenticate, function (req, res, next) {
   User.find().exec(function (err, users) {

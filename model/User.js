@@ -1,8 +1,8 @@
-import mongoose, { Schema, model } from "mongoose";
+import mongoose from "mongoose";
 
-// Créer une nouvelle instance de Schema
+
 //create the user schema
-let userSchema = new Schema({
+const userSchema = new mongoose.Schema({
     id: {
         type: mongoose.ObjectId
     },
@@ -36,19 +36,19 @@ let userSchema = new Schema({
         unique: true,
         match: [/\S+@\S+\.\S+/, 'Please enter a valid email']
     },
-    Zip_code:{
+    Zip_code: {
         type: Number,
         required: [true, 'You must provide a Zip code!'],
         minLength: 4,
         maxLength: 4
     },
-    city:{
+    city: {
         type: String,
         required: [true, 'You must provide a city!'],
         maxLength: 30,
         minLength: 3
     },
-    address:{
+    address: {
         type: String,
         required: [true, 'You must provide an address!'],
         maxLength: 50,
@@ -59,6 +59,8 @@ let userSchema = new Schema({
         default: Date.now
     }
 })
+
+
 
 
 //Hide the hashed password and _v to the api users
@@ -76,13 +78,16 @@ function transformJsonUser(doc, json, options) {
 async function createUser(data) {
     const existingUser = await User.findOne({ $or: [{ username: data.username }, { email: data.email }] });
     if (existingUser) {
-      throw new Error('Username or email already exists');
+        throw new Error('Username or email already exists');
     }
-   
+
     const user = new User(data);
     await user.save();
     console.log('Utilisateur créé avec succès');
-  }
+}
 
 //create model and export it
-export const User = model('User', userSchema)
+const User = mongoose.model('User', userSchema)
+
+//export the model
+export default User;

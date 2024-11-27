@@ -16,7 +16,7 @@ let parkSchema = new Schema({
         required: [true, 'You must provide a height'],
         min: 0
     },
-    picture : {
+    picture: {
         type: String,
         required: [true, 'You must provide a picture'],
     },
@@ -35,6 +35,12 @@ let parkSchema = new Schema({
     creationDate: {
         type: Date,
         default: Date.now
+    },
+    freeTime: {
+        type: Number,
+        required: [true, 'You must provide a free time duration'],
+        min: 0,
+        default: 0 // Par défaut, pas de temps gratuit
     }
 })
 
@@ -51,6 +57,8 @@ function isLatitude(value) {
 function isLongitude(value) {
     return value >= -180 && value <= 180;
 }
+
+
 
 //create model and export it
 export const Park = model('Park', parkSchema)

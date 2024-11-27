@@ -6,10 +6,11 @@ import indexRouter from "./routes/index.js";
 import usersRouter from "./routes/users.js";
 import parksRouter from "./routes/parks.js";
 import parkingSessionsRouter from "./routes/parkingSessions.js";
+import notificationsRouter from './routes/notifications.js';
 import mongoose from 'mongoose';
 
 ///DATABASE CONNECTION
-mongoose.connect(process.env.DATABASE_URL || 'mongodb://localhost/monapp', {
+mongoose.connect(process.env.DATABASE_URL || 'mongodb://localhost/monApp', {
 
 })
   .then(() => console.log('Connected to MongoDB'))
@@ -25,6 +26,7 @@ app.use("/users", usersRouter);
 app.use("/login", usersRouter);
 app.use("/parks", parksRouter);
 app.use("/parkingSession", parkingSessionsRouter);
+app.use('/notifications', notificationsRouter);
 app.use("/", indexRouter);
 
 // mettre tous les routes objets

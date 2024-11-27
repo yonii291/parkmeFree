@@ -10,12 +10,12 @@ function authenticate(req, res, next) {
 
     try {
         // Vérifie et décode le token
-        const decoded = jwt.verify(token, 'secret_key');
+        const decoded = jwt.verify(token, config.jwtSecret);
         req.user = decoded; // attache les données du token à la requête
         next(); // passe à la suite si le token est valide
     } catch (error) {
         res.status(401).send('Token invalide');
     }
 }
-// module.exports = authenticate;
+export default authenticate;
 

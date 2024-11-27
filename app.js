@@ -9,7 +9,7 @@ import parkingSessionsRouter from "./routes/parkingSessions.js";
 import mongoose from 'mongoose';
 
 ///DATABASE CONNECTION
-mongoose.connect('mongodb://localhost/monApp', {
+mongoose.connect(process.env.DATABASE_URL || 'mongodb://localhost/monapp', {
 
 })
   .then(() => console.log('Connected to MongoDB'))

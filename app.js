@@ -7,6 +7,7 @@ import carsRouter from "./routes/cars.js";
 import usersRouter from "./routes/users.js";
 import parksRouter from "./routes/parks.js";
 import parkingSessionsRouter from "./routes/parkingSessions.js";
+import notificationsRouter from './routes/notifications.js';
 import mongoose from 'mongoose';
 
 ///DATABASE CONNECTION
@@ -27,6 +28,7 @@ app.use("/login", usersRouter);
 app.use("/parks", parksRouter);
 app.use("/cars", carsRouter);
 app.use("/parkingSession", parkingSessionsRouter);
+app.use('/notifications', notificationsRouter);
 app.use("/", indexRouter);
 
 // mettre tous les routes objets

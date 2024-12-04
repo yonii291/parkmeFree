@@ -8,6 +8,7 @@
     "start": "node ./bin/start.js"
   },
   "dependencies": {
+    "@onesignal/node-onesignal": "^5.0.0-alpha-01",
     "bcrypt": "^5.1.1",
     "bcryptjs": "^2.4.3",
     "debug": "^4.3.4",

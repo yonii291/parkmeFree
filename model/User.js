@@ -57,6 +57,10 @@ const userSchema = new mongoose.Schema({
         maxLength: 50,
         minLength: 5
     },
+    notificationToken: {
+        type: String,
+        required: false // Ce champ est facultatif
+    },
     creationDate: {
         type: Date,
         default: Date.now

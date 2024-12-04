@@ -3,13 +3,14 @@ import createError from "http-errors";
 import logger from "morgan";
 
 import indexRouter from "./routes/index.js";
+import carsRouter from "./routes/cars.js";
 import usersRouter from "./routes/users.js";
 import parksRouter from "./routes/parks.js";
 import parkingSessionsRouter from "./routes/parkingSessions.js";
 import mongoose from 'mongoose';
 
 ///DATABASE CONNECTION
-mongoose.connect(process.env.DATABASE_URL || 'mongodb://localhost/monapp', {
+mongoose.connect(process.env.DATABASE_URL || 'mongodb://localhost/monApp', {
 
 })
   .then(() => console.log('Connected to MongoDB'))
@@ -24,6 +25,7 @@ app.use(express.urlencoded({ extended: false }));
 app.use("/users", usersRouter);
 app.use("/login", usersRouter);
 app.use("/parks", parksRouter);
+app.use("/cars", carsRouter);
 app.use("/parkingSession", parkingSessionsRouter);
 app.use("/", indexRouter);
 

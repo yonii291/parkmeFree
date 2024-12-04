@@ -24,7 +24,8 @@ router.post('/register', async (req, res) => {
   try {
     const user = new User(req.body);
     await user.save();
-    res.status(201).send(user);
+    const token = await user.generateAuthToken();
+    res.status(201).send({ user, token });
   } catch (error) {
     res.status(400).send(error.message);
   }
@@ -40,15 +41,7 @@ router.get('/allUsers', async function (req, res, next) {
   }
 });
 
-// // Get all users
-// router.get('/allUsers', authenticate, async function (req, res, next) {
-//   try {
-//     const users = await User.find().exec(); // Utilisation de await sans callback
-//     res.status(200).send(users);
-//   } catch (err) {
-//     next(err); // Gestion de l'erreur avec try/catch
-//   }
-// });
+
 
 // Get user by ID - ok
 router.get('/:id', authenticate, authorize(['Admin', 'User']), function (req, res, next) {
@@ -77,16 +70,6 @@ router.put('/update/:id', authenticate, authorize(['Admin']), async function (re
 });
 
 
-// // Update user by ID
-// router.put('/update/:id', authenticate, function (req, res, next) {
-//   User.findByIdAndUpdate(req.params.id, req.body, { new: true }).exec(function (err, updatedUser) {
-//     if (err) {
-//       return next(err);
-//     }
-//     res.status(200).send(updatedUser);
-//   });
-// });
-
 router.delete('delete/:id', async function (req, res, next) {
   try {
     const removedUser = await User.findByIdAndRemove(req.params.id).exec();
@@ -96,15 +79,15 @@ router.delete('delete/:id', async function (req, res, next) {
   }
 });
 
+router.post('/', async (req, res) => {
+  try {
+    const user = await User.findByCredentials(req.body.email, req.body.password);
+    const token = await user.generateAuthToken();
+    res.status(200).send({ user, token });
+  } catch (error) {
+    res.status(400).send(error.message);
+  }
+});
 
-// // Delete user by ID
-// router.delete('/:id', authenticate, function (req, res, next) {
-//   User.findByIdAndRemove(req.params.id).exec(function (err, removedUser) {
-//     if (err) {
-//       return next(err);
-//     }
-//     res.status(200).send(removedUser);
-//   });
-// });
 
 export default router;

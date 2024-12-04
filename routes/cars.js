@@ -32,7 +32,7 @@ router.get('/:id', function (req, res, next) {
 });
 
 // Create a new car
-router.post('/', authenticate, function (req, res, next) {
+router.post('/create', authenticate, function (req, res, next) {
     const newCar = new Car(req.body);
     newCar.save(function (err, savedCar) {
         if (err) {

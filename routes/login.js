@@ -44,10 +44,10 @@ const router = express.Router();
 
 // Login a user
 router.post('/', async function (req, res, next) {
-    const { username, password } = req.body;
+    const { email, password } = req.body;
     try {
         // Trouver l'utilisateur par son nom d'utilisateur
-        const user = await User.findOne({ username: username });
+        const user = await User.findOne({ email: email });
 
         // Si l'utilisateur n'existe pas
         if (!user) {

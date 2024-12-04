@@ -58,7 +58,5 @@ function isLongitude(value) {
     return value >= -180 && value <= 180;
 }
 
-
-
 //create model and export it
 export const Park = model('Park', parkSchema)

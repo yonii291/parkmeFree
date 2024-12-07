@@ -5,7 +5,8 @@
   "type": "module",
   "scripts": {
     "dev": "nodemon",
-    "start": "node ./bin/start.js"
+    "start": "node ./bin/start.js",
+    "apidoc": "apidoc -i routes -o documentation"
   },
   "dependencies": {
     "@onesignal/node-onesignal": "^5.0.0-alpha-01",
@@ -19,6 +20,7 @@
     "morgan": "^1.10.0"
   },
   "devDependencies": {
+    "apidoc": "^1.2.0",
     "nodemon": "^3.1.7"
   }
 }

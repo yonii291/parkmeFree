@@ -23,13 +23,13 @@ app.use(logger("dev"));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
-app.use("/users", usersRouter);
-app.use("/login", usersRouter);
-app.use("/parks", parksRouter);
-app.use("/cars", carsRouter);
-app.use("/parkingSession", parkingSessionsRouter);
-app.use('/notifications', notificationsRouter);
-app.use("/", indexRouter);
+app.use("/api/users", usersRouter);
+app.use("/api/login", usersRouter);
+app.use("/api/parks", parksRouter);
+app.use("/api/cars", carsRouter);
+app.use("/api/parkingSession", parkingSessionsRouter);
+app.use("/api/notifications", notificationsRouter);
+app.use("/api", indexRouter);
 
 // mettre tous les routes objets
 

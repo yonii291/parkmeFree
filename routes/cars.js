@@ -14,14 +14,16 @@ const router = express.Router();
 // Get all cars
 
 /**
- * @api {get} /cars/:id Request a car's information
- * @apiName GetCar
+ * @api {get} /cars Get all cars
+ * @apiName GetAllCars
  * @apiGroup Car
  *
- * @apiParam {Number} id Unique identifier of the car
- *
- * @apiSuccess {String} firstName First name of the user
- * @apiSuccess {String} lastName  Last name of the user
+ * @apiSuccess {Object[]} cars List of cars
+ * @apiSuccess {String} cars.id Unique identifier of the car
+ * @apiSuccess {String} cars.model Model of the car
+ * @apiSuccess {Number} cars.height Height of the car in cm
+ * @apiSuccess {String} cars.license_plate License plate number of the car
+ * @apiSuccess {Date} cars.creationDate Date when the car was created
  *
  * @apiError {String} message Error message
  */
@@ -35,6 +37,23 @@ router.get("/", function (req, res, next) {
 });
 
 // Get car by ID
+
+/**
+ * @api {get} /cars/:id Get car by ID
+ * @apiName GetCarById
+ * @apiGroup Car
+ *
+ * @apiParam {String} id Unique identifier of the car
+ *
+ * @apiSuccess {String} id Unique identifier of the car
+ * @apiSuccess {String} model Model of the car
+ * @apiSuccess {Number} height Height of the car in cm
+ * @apiSuccess {String} license_plate License plate number of the car
+ * @apiSuccess {Date} creationDate Date when the car was created
+ *
+ * @apiError {String} message Error message
+ */
+
 router.get("/:id", function (req, res, next) {
   Car.findOne({ _id: req.params.id }).exec(function (err, car) {
     if (err) {
@@ -56,6 +75,33 @@ router.post("/create", authenticate, function (req, res, next) {
 });
 
 // Update a car by ID
+
+/**
+ * @api {put} /cars/:id Update a car by ID
+ * @apiName UpdateCar
+ * @apiGroup Car
+ * @apiHeader {String} Authorization Bearer token for authentication
+ *
+ * @apiParam {String} id Unique identifier of the car
+ *
+ * @apiBody {String} [model] Model of the car (3-30 characters)
+ * @apiBody {Number} [height] Height of the car in cm (2-3 digits)
+ * @apiBody {String} [license_plate] License plate number of the car (1-9 characters)
+ *
+ * @apiSuccess {String} id Unique identifier of the car
+ * @apiSuccess {String} model Updated model of the car
+ * @apiSuccess {Number} height Updated height of the car
+ * @apiSuccess {String} license_plate Updated license plate number of the car
+ * @apiSuccess {Date} creationDate Date when the car was created
+ *
+ * @apiError {String} message Error message
+ * @apiErrorExample {json} Error-Response:
+ *   HTTP/1.1 404 Not Found
+ *   {
+ *     "message": "Car not found"
+ *   }
+ */
+
 router.put("/:id", authenticate, function (req, res, next) {
   Car.findByIdAndUpdate(req.params.id, req.body, { new: true }).exec(function (
     err,

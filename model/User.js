@@ -9,19 +9,19 @@ const userSchema = new mongoose.Schema({
     id: {
         type: mongoose.ObjectId
     },
-    firstName: {
+    firstname: {
         type: String,
         required: [true, 'You must provide a name!'],
         maxLength: 20,
         minLength: 3
     },
-    lastName: {
+    lastname: {
         type: String,
         required: [true, 'You must provide a lastname!'],
         maxLength: 20,
         minLength: 3
     },
-    userName: {
+    username: {
         type: String,
         required: [true, 'You must provide a username!'],
         maxLength: 20,

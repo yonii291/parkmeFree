@@ -44,7 +44,7 @@ router.get('/allUsers', async function (req, res, next) {
 
 
 // Get user by ID - ok
-router.get('/:id', authenticate, authorize(['Admin', 'User']), function (req, res, next) {
+router.get('/{:id}', authenticate, authorize(['Admin', 'User']), function (req, res, next) {
 
   User.findById(req.params.id).exec(function (err, user) {
 
@@ -60,7 +60,7 @@ router.get('/:id', authenticate, authorize(['Admin', 'User']), function (req, re
 
 
 // Update user by ID - ok
-router.put('/update/:id', authenticate, authorize(['Admin']), async function (req, res, next) {
+router.put('/update', authenticate, authorize(['Admin']), async function (req, res, next) {
   try {
     const updatedUser = await User.findByIdAndUpdate(req.params.id, req.body, { new: true }).exec();
     res.status(200).send(updatedUser);

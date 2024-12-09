@@ -1,7 +1,9 @@
-import mongoose, { Schema, model } from "mongoose";
+import mongoose from "mongoose";
+
+const { Schema } = mongoose;
 
 // create the car schema
-let carSchema = new Schema({
+const carSchema = new Schema({
     id: {
         type: mongoose.ObjectId
     },
@@ -42,6 +44,6 @@ function transformJsonCar(doc, json, options) {
     delete json.__v;
     return json;
 }
+const Car = mongoose.model('Car', carSchema);
 
-//create model and export it
-export const Car = model('Car', carSchema)
+export default Car;

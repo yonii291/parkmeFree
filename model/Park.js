@@ -24,13 +24,19 @@ let parkSchema = new Schema({
         type: Boolean,
         required: [true, 'You must provide an availability status']
     },
-    geolocation: {
-        type: [Number],
-        required: true,
-        validate: {
-            validator: validateGeoJsonCoordinates,
-            message: '{VALUE} is not a valid longitude/latitude(/altitude) coordinates array'
-        }
+    adress: {
+        type: String,
+        required: [true, 'You must provide an address'],
+    },
+    npa: {
+        type: Number,
+        required: [true, 'You must provide a postal code'],
+        min: 1000,
+        max: 9999
+    },
+    city: {
+        type: String,
+        required: [true, 'You must provide a city'],
     },
     creationDate: {
         type: Date,

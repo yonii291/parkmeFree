@@ -115,12 +115,12 @@ async function createUser(data) {
 userSchema.statics.findByCredentials = async (email, password) => {
     const user = await User.findOne({ email });
     if (!user) {
-        throw new Error('Unable to login45');
+        throw new Error('Unable to login');
     }
 
     const isMatch = await bcrypt.compare(password, user.password);
     if (!isMatch) {
-        throw new Error(password + user.password + isMatch);
+        throw new Error('Unable to login');
 
     }
 

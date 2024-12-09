@@ -7,7 +7,7 @@
 // export default router;
 
 import express from 'express';
-import { Car } from '../model/Car.js';
+import Car  from '../model/Car.js';
 import authenticate from '../utils/auth.js';
 const router = express.Router();
 
@@ -32,15 +32,27 @@ router.get('/:id', function (req, res, next) {
 });
 
 // Create a new car
-router.post('/create', authenticate, function (req, res, next) {
-    const newCar = new Car(req.body);
-    newCar.save(function (err, savedCar) {
-        if (err) {
-            return next(err);
-        }
-        res.status(201).send(savedCar);
-    });
-});
+// router.post('/create', authenticate, function (req, res, next) {
+//     const newCar = new Car(req.body);
+//     newCar.save(function (err, savedCar) {
+//         if (err) {
+//             return next(err);
+//         }
+//         res.status(201).send(savedCar);
+//     });
+// });
+// Route pour créer une nouvelle voiture
+router.post('/create', authenticate, async (req, res, next) => {
+    try {
+      console.log('Données reçues pour la création de la voiture:', req.body);
+      const newCar = new Car(req.body);
+      const savedCar = await newCar.save();
+      res.status(201).send(savedCar);
+    } catch (err) {
+      console.error('Erreur lors de la création de la voiture:', err.message);
+      res.status(400).send(err.message);
+    }
+  });
 
 // Update a car by ID
 router.put('/:id', authenticate, function (req, res, next) {

@@ -39,24 +39,6 @@ const userSchema = new mongoose.Schema({
         unique: true,
         match: [/\S+@\S+\.\S+/, 'Please enter a valid email']
     },
-    Zip_code: {
-        type: Number,
-        required: [true, 'You must provide a Zip code!'],
-        minLength: 4,
-        maxLength: 4
-    },
-    city: {
-        type: String,
-        required: [true, 'You must provide a city!'],
-        maxLength: 30,
-        minLength: 3
-    },
-    address: {
-        type: String,
-        required: [true, 'You must provide an address!'],
-        maxLength: 50,
-        minLength: 5
-    },
     notificationToken: {
         type: String,
         required: false // Ce champ est facultatif

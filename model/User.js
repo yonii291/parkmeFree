@@ -64,28 +64,5 @@ function transformJsonUser(doc, json, options) {
     return json;
 }
 
-<<<<<<< HEAD
-// // Méthode pour trouver un utilisateur par ses identifiants
-userSchema.statics.findByCredentials = async (email, password) => {
-    const user = await User.findOne({ email });
-    if (!user) {
-        throw new Error('Unable to login');
-    }
-
-    const isMatch = await bcrypt.compare(password, user.password);
-    if (!isMatch) {
-        throw new Error('Unable to login');
-
-    }
-
-    return user;
-};
-
-
-//create model and export it
-const User = mongoose.model('User', userSchema)
-
-=======
->>>>>>> 2c58b5f706c23656720c101e19d13a4ad9afcef8
 //export the model
 export const User = model('User', userSchema)

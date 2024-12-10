@@ -24,21 +24,6 @@ let parkSchema = new Schema({
         type: Number,
         required: [true, 'You must provide a capacity']
     },
-<<<<<<< HEAD
-    adress: {
-        type: String,
-        required: [true, 'You must provide an address'],
-    },
-    npa: {
-        type: Number,
-        required: [true, 'You must provide a postal code'],
-        min: 1000,
-        max: 9999
-    },
-    city: {
-        type: String,
-        required: [true, 'You must provide a city'],
-=======
     geolocation: {
         type: [Number],
         required: true,
@@ -46,7 +31,6 @@ let parkSchema = new Schema({
             validator: validateGeoJsonCoordinates,
             message: '{VALUE} is not a valid longitude/latitude(/altitude) coordinates array'
         }
->>>>>>> 9b71a392e765d8ff26536b7d9f155ff41c0588ad
     },
     creationDate: {
         type: Date,

@@ -20,10 +20,11 @@ let parkSchema = new Schema({
         type: String,
         required: [true, 'You must provide a picture'],
     },
-    availability: {
-        type: Boolean,
-        required: [true, 'You must provide an availability status']
+    capacity: {
+        type: Number,
+        required: [true, 'You must provide a capacity']
     },
+<<<<<<< HEAD
     adress: {
         type: String,
         required: [true, 'You must provide an address'],
@@ -37,6 +38,15 @@ let parkSchema = new Schema({
     city: {
         type: String,
         required: [true, 'You must provide a city'],
+=======
+    geolocation: {
+        type: String,
+        required: true,
+        validate: {
+            validator: validateGeoJsonCoordinates,
+            message: '{VALUE} is not a valid longitude/latitude(/altitude) coordinates array'
+        }
+>>>>>>> 9b71a392e765d8ff26536b7d9f155ff41c0588ad
     },
     creationDate: {
         type: Date,

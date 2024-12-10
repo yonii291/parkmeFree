@@ -25,6 +25,10 @@ let parkingSessionSchema = new Schema({
         type: mongoose.ObjectId,
         required: [true, 'You must provide a car_id!']
     },
+    geolocalisation: {
+        type: String,
+        required: [true, 'You must provide a geolocalisation!']
+    },
     creationDate: {
         type: Date,
         default: Date.now

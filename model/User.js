@@ -9,19 +9,19 @@ const userSchema = new mongoose.Schema({
     id: {
         type: mongoose.ObjectId
     },
-    firstName: {
+    firstname: {
         type: String,
         required: [true, 'You must provide a name!'],
         maxLength: 20,
         minLength: 3
     },
-    lastName: {
+    lastname: {
         type: String,
         required: [true, 'You must provide a lastname!'],
         maxLength: 20,
         minLength: 3
     },
-    userName: {
+    username: {
         type: String,
         required: [true, 'You must provide a username!'],
         maxLength: 20,
@@ -38,24 +38,6 @@ const userSchema = new mongoose.Schema({
         required: [true, 'You must provide an email!'],
         unique: true,
         match: [/\S+@\S+\.\S+/, 'Please enter a valid email']
-    },
-    Zip_code: {
-        type: Number,
-        required: [true, 'You must provide a Zip code!'],
-        minLength: 4,
-        maxLength: 4
-    },
-    city: {
-        type: String,
-        required: [true, 'You must provide a city!'],
-        maxLength: 30,
-        minLength: 3
-    },
-    address: {
-        type: String,
-        required: [true, 'You must provide an address!'],
-        maxLength: 50,
-        minLength: 5
     },
     notificationToken: {
         type: String,

@@ -34,14 +34,14 @@ router.get('/:id', function (req, res, next) {
 });
 
 // Create a new park
-router.post('/', authenticate, function (req, res, next) {
-  const newPark = new Park(req.body);
-  newPark.save(function (err, savedPark) {
-    if (err) {
-      return next(err);
-    }
-    res.status(201).send(savedPark);
-  });
+router.post('/', authenticate, async (req, res) => {
+  try {
+    const newPark = new Park(req.body);
+    await newPark.save()
+    res.status(201).send({ newPark });
+  } catch (error) {
+    res.status(401).send(error.message)
+  }
 });
 
 // Update a park by ID

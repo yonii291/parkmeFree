@@ -5,6 +5,7 @@ import logger from "morgan";
 import indexRouter from "./routes/index.js";
 import carsRouter from "./routes/cars.js";
 import usersRouter from "./routes/users.js";
+import loginRouter from "./routes/login.js";
 import parksRouter from "./routes/parks.js";
 import parkingSessionsRouter from "./routes/parkingSessions.js";
 import notificationsRouter from "./routes/notifications.js";
@@ -29,7 +30,7 @@ app.use("/api/notifications", notificationsRouter);
 app.use("/api/parkingSession", parkingSessionsRouter);
 app.use("/api/cars", carsRouter);
 app.use("/api/parks", parksRouter);
-app.use("/api/login", usersRouter);
+app.use("/api/login", loginRouter);
 app.use("/api/users", usersRouter);
 
 // mettre tous les routes objets

@@ -25,7 +25,7 @@ let parkSchema = new Schema({
         required: [true, 'You must provide a capacity']
     },
     geolocation: {
-        type: String,
+        type: [Number],
         required: true,
         validate: {
             validator: validateGeoJsonCoordinates,

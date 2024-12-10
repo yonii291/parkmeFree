@@ -13,9 +13,8 @@
 // export default router;
 
 import express from 'express';
-import User from '../model/User.js';
+import { User } from '../model/User.js';
 import authenticate from '../utils/auth.js';
-import authorize from '../utils/authorize.js';
 
 const router = express.Router();
 
@@ -24,8 +23,7 @@ router.post('/register', async (req, res) => {
   try {
     const user = new User(req.body);
     await user.save();
-    const token = await user.generateAuthToken();
-    res.status(201).send({ user, token });
+    res.status(201).send({ user });
   } catch (error) {
     res.status(400).send(error.message);
   }
@@ -44,7 +42,7 @@ router.get('/allUsers', async function (req, res, next) {
 
 
 // Get user by ID - ok
-router.get('/:id', authenticate, authorize(['Admin', 'User']), function (req, res, next) {
+router.get('/:id', authenticate, function (req, res, next) {
 
   User.findById(req.params.id).exec(function (err, user) {
 
@@ -60,7 +58,7 @@ router.get('/:id', authenticate, authorize(['Admin', 'User']), function (req, re
 
 
 // Update user by ID - ok
-router.put('/update/:id', authenticate, authorize(['Admin']), async function (req, res, next) {
+router.put('/update/:id', authenticate, async function (req, res, next) {
   try {
     const updatedUser = await User.findByIdAndUpdate(req.params.id, req.body, { new: true }).exec();
     res.status(200).send(updatedUser);
@@ -79,7 +77,7 @@ router.delete('delete/:id', async function (req, res, next) {
   }
 });
 
-router.post('/', async (req, res) => {
+/* router.post('/', async (req, res) => {
   try {
     const user = await User.findByCredentials(req.body.email, req.body.password);
     const token = await user.generateAuthToken();
@@ -87,7 +85,7 @@ router.post('/', async (req, res) => {
   } catch (error) {
     res.status(400).send(error.message);
   }
-});
+}); */
 
 
 export default router;

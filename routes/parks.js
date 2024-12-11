@@ -37,7 +37,7 @@ router.get('/:id', async (req, res, next) => {
 });
 
 // Create a new park - ok
-router.post('/', authenticate, async (req, res) => {
+router.post('/create', authenticate, async (req, res) => {
   try {
     const newPark = new Park(req.body);
     await newPark.save()

@@ -27,7 +27,7 @@ app.use(express.urlencoded({ extended: false }));
 
 app.use("/api", indexRouter);
 app.use("/api/notifications", notificationsRouter);
-app.use("/api/parkingSession", parkingSessionsRouter);
+app.use("/api/parkingSessions", parkingSessionsRouter);
 app.use("/api/cars", carsRouter);
 app.use("/api/parks", parksRouter);
 app.use("/api/login", loginRouter);

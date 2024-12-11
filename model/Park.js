@@ -13,8 +13,7 @@ let parkSchema = new Schema({
     },
     height: {
         type: Number,
-        required: [true, 'You must provide a height'],
-        min: 0
+        default: null
     },
     picture: {
         type: String,

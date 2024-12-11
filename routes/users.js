@@ -1,36 +1,34 @@
-// import express from "express";
-// import bcrypt from "bcryptjs";
-// import { User } from "../model/User.js";
-// import { Park } from "../model/Park.js";
-
-
-// const router = express.Router();
-
-// router.get("/", function (req, res, next) {
-//   res.send("Got a response from the users route");
-// });
-
-// export default router;
-
 import express from 'express';
 import { User } from '../model/User.js';
 import authenticate from '../utils/auth.js';
+import bcrypt from 'bcryptjs';
 
 const router = express.Router();
 
-// Create a new user
+
+// Create a new user - ok
 router.post('/register', async (req, res) => {
   try {
-    const user = new User(req.body);
-    await user.save();
-    res.status(201).send({ user });
+    const plainPassword = req.body.password;
+    const costFactor = 10;
+    bcrypt.hash(plainPassword, costFactor, async function (err, hashedPassword) {
+      if (err) {
+        return res.status(500).send(err.message);
+      }
+      const user = new User({
+        ...req.body,
+        password: hashedPassword
+      });
+      await user.save();
+      res.status(201).send({ user });
+    });
   } catch (error) {
     res.status(400).send(error.message);
   }
 });
 
-// Get all users
-router.get('/allUsers', async function (req, res, next) {
+// Get all users - ok
+router.get('/', async function (req, res, next) {
   try {
     const users = await User.find().exec(); // Utilisation de await sans callback
     res.status(200).send(users);
@@ -42,18 +40,16 @@ router.get('/allUsers', async function (req, res, next) {
 
 
 // Get user by ID - ok
-router.get('/:id', authenticate, function (req, res, next) {
-
-  User.findById(req.params.id).exec(function (err, user) {
-
-    if (err) {
-      return next(err);
-    }
+router.get('/:id', authenticate, async (req, res, next) => {
+  try {
+    const user = await User.findById(req.params.id);
     if (!user) {
       return res.status(404).send({ message: 'User not found' });
     }
     res.status(200).send(user);
-  });
+  } catch (err) {
+    next(err);
+  }
 });
 
 
@@ -67,25 +63,15 @@ router.put('/update/:id', authenticate, async function (req, res, next) {
   }
 });
 
-
-router.delete('delete/:id', async function (req, res, next) {
+//supprime un user - ok
+router.delete('/delete/:id', async function (req, res, next) {
   try {
-    const removedUser = await User.findByIdAndRemove(req.params.id).exec();
+    const removedUser = await User.findByIdAndDelete(req.params.id).exec();
+
     res.status(200).send(removedUser);
   } catch (err) {
     next(err);
   }
 });
-
-/* router.post('/', async (req, res) => {
-  try {
-    const user = await User.findByCredentials(req.body.email, req.body.password);
-    const token = await user.generateAuthToken();
-    res.status(200).send({ user, token });
-  } catch (error) {
-    res.status(400).send(error.message);
-  }
-}); */
-
 
 export default router;

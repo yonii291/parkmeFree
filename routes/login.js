@@ -13,7 +13,7 @@ router.post("/", async (req, res) => {
         await User.findOne({ email: req.body.email }).then((user) => {
             //Si pas d'utilisateur
             if (!user) {
-                return res.sendStatus(401);
+                return res.sendStatus(401).send({ message: 'User not found' });
             }
             //Validate the password with bcrypt
             bcrypt.compare(req.body.password, user.password, function (err, valid) {
@@ -29,7 +29,7 @@ router.post("/", async (req, res) => {
                     if (err) {
                         return next(err)
                     }
-                    res.status(200).send({ token: token, user: user })
+                    res.status(200).send({ token: token })
                 })
             });
         }).catch((err) => {

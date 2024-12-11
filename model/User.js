@@ -9,19 +9,19 @@ const userSchema = new mongoose.Schema({
     id: {
         type: mongoose.ObjectId
     },
-    firstname: {
+    firstName: {
         type: String,
         required: [true, 'You must provide a name!'],
         maxLength: 20,
         minLength: 3
     },
-    lastname: {
+    lastName: {
         type: String,
         required: [true, 'You must provide a lastname!'],
         maxLength: 20,
         minLength: 3
     },
-    username: {
+    userName: {
         type: String,
         required: [true, 'You must provide a username!'],
         maxLength: 20,
@@ -59,7 +59,7 @@ userSchema.set("toJSON", {
 });
 function transformJsonUser(doc, json, options) {
     // Remove the hashed password and _v from the generated JSON.
-    delete json.password;
+    //delete json.password;
     delete json.__v;
     return json;
 }

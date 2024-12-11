@@ -6,15 +6,9 @@
 
 // export default router;
 
-<<<<<<< HEAD
-import express from 'express';
-import Car  from '../model/Car.js';
-import authenticate from '../utils/auth.js';
-=======
 import express from "express";
-import { Car } from "../model/Car.js";
+import  Car  from "../model/Car.js";
 import authenticate from "../utils/auth.js";
->>>>>>> 9b71a392e765d8ff26536b7d9f155ff41c0588ad
 const router = express.Router();
 
 // Get all cars
@@ -70,7 +64,6 @@ router.get("/:id", function (req, res, next) {
 });
 
 // Create a new car
-<<<<<<< HEAD
 // router.post('/create', authenticate, function (req, res, next) {
 //     const newCar = new Car(req.body);
 //     newCar.save(function (err, savedCar) {
@@ -92,17 +85,6 @@ router.post('/create', authenticate, async (req, res, next) => {
       res.status(400).send(err.message);
     }
   });
-=======
-router.post("/create", authenticate, function (req, res, next) {
-  const newCar = new Car(req.body);
-  newCar.save(function (err, savedCar) {
-    if (err) {
-      return next(err);
-    }
-    res.status(201).send(savedCar);
-  });
-});
->>>>>>> 9b71a392e765d8ff26536b7d9f155ff41c0588ad
 
 // Update a car by ID
 

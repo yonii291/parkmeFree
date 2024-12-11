@@ -16,8 +16,7 @@ const carSchema = new Schema({
     height: {
         type: Number,
         required: [true, 'You must provide a height in cm'],
-        min: 2,
-        max: 3
+        min: 0
     },
     license_plate: {
         type: String,

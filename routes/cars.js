@@ -1,17 +1,9 @@
-// const router = express.Router();
-
-// router.get("/", function (req, res, next) {
-//     res.send("Bienvenue sur la route de cars!");
-// });
-
-// export default router;
-
 import express from "express";
-import  Car  from "../model/Car.js";
+import Car from "../model/Car.js";
 import authenticate from "../utils/auth.js";
 const router = express.Router();
 
-// Get all cars
+
 
 /**
  * @api {get} /cars Get all cars
@@ -27,16 +19,18 @@ const router = express.Router();
  *
  * @apiError {String} message Error message
  */
-router.get("/", function (req, res, next) {
-  Car.find().exec(function (err, cars) {
-    if (err) {
-      return next(err);
-    }
+
+// Get all cars - ok
+router.get("/", async (req, res, next) => {
+  try {
+    const cars = await Car.find();
     res.status(200).send(cars);
-  });
+  } catch (err) {
+    next(err);
+  }
 });
 
-// Get car by ID
+
 
 /**
  * @api {get} /cars/:id Get car by ID
@@ -54,39 +48,33 @@ router.get("/", function (req, res, next) {
  * @apiError {String} message Error message
  */
 
-router.get("/:id", function (req, res, next) {
-  Car.findOne({ _id: req.params.id }).exec(function (err, car) {
-    if (err) {
-      return next(err);
+// Get car by ID - ok
+router.get("/:id", async (req, res, next) => {
+  try {
+    const car = await Car.findOne({ _id: req.params.id });
+    if (!car) {
+      return res.status(404).send({ message: 'Car not found' });
     }
     res.status(200).send(car);
-  });
+  } catch (err) {
+    next(err);
+  }
 });
 
-// Create a new car
-// router.post('/create', authenticate, function (req, res, next) {
-//     const newCar = new Car(req.body);
-//     newCar.save(function (err, savedCar) {
-//         if (err) {
-//             return next(err);
-//         }
-//         res.status(201).send(savedCar);
-//     });
-// });
-// Route pour créer une nouvelle voiture
-router.post('/create', authenticate, async (req, res, next) => {
-    try {
-      console.log('Données reçues pour la création de la voiture:', req.body);
-      const newCar = new Car(req.body);
-      const savedCar = await newCar.save();
-      res.status(201).send(savedCar);
-    } catch (err) {
-      console.error('Erreur lors de la création de la voiture:', err.message);
-      res.status(400).send(err.message);
-    }
-  });
 
-// Update a car by ID
+// Create a new car - ok
+router.post('/create', authenticate, async (req, res, next) => {
+  try {
+    console.log('Données reçues pour la création de la voiture:', req.body);
+    const newCar = new Car(req.body);
+    const savedCar = await newCar.save();
+    res.status(201).send(savedCar);
+  } catch (err) {
+    console.error('Erreur lors de la création de la voiture:', err.message);
+    res.status(400).send(err.message);
+  }
+});
+
 
 /**
  * @api {put} /cars/:id Update a car by ID
@@ -114,26 +102,31 @@ router.post('/create', authenticate, async (req, res, next) => {
  *   }
  */
 
-router.put("/:id", authenticate, function (req, res, next) {
-  Car.findByIdAndUpdate(req.params.id, req.body, { new: true }).exec(function (
-    err,
-    updatedCar
-  ) {
-    if (err) {
-      return next(err);
+// Update a car by ID - ok
+
+router.put("/:id", authenticate, async (req, res, next) => {
+  try {
+    const updatedCar = await Car.findByIdAndUpdate(req.params.id, req.body, { new: true });
+    if (!updatedCar) {
+      return res.status(404).send({ message: 'Car not found' });
     }
     res.status(200).send(updatedCar);
-  });
+  } catch (err) {
+    next(err);
+  }
 });
 
-// Delete a car by ID
-router.delete("/:id", authenticate, function (req, res, next) {
-  Car.findByIdAndRemove(req.params.id).exec(function (err, removedCar) {
-    if (err) {
-      return next(err);
+// Delete a car by ID - ok
+router.delete("/:id", authenticate, async (req, res, next) => {
+  try {
+    const removedCar = await Car.findByIdAndDelete(req.params.id);
+    if (!removedCar) {
+      return res.status(404).send({ message: 'Car not found' });
     }
     res.status(200).send(removedCar);
-  });
+  } catch (err) {
+    next(err);
+  }
 });
 
 export default router;

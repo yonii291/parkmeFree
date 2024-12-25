@@ -1,66 +1,60 @@
-
-
-// const router = express.Router();
-
-// router.get("/", function (req, res, next) {
-//     res.send("Bienvenue sur la route de parkings!");
-// });
-
-// export default router;
 import express from 'express';
 import { ParkingSession } from '../model/ParkingSession.js';
 import authenticate from '../utils/auth.js';
 const router = express.Router();
 
-// Get all parking sessions
-router.get('/', function (req, res, next) {
-  ParkingSession.find().exec(function (err, sessions) {
-    if (err) {
-      return next(err);
-    }
+// Get all parking sessions - ok
+router.get('/', async (req, res, next) => {
+  try {
+    const sessions = await ParkingSession.find();
     res.status(200).send(sessions);
-  });
+  } catch (err) {
+    next(err);
+  }
 });
 
-// Get parking session by ID
-router.get('/:id', function (req, res, next) {
-  ParkingSession.findOne({ _id: req.params.id }).exec(function (err, session) {
-    if (err) {
-      return next(err);
-    }
+// Get parking session by ID - ok
+router.get('/:id', async (req, res, next) => {
+  try {
+    const session = await ParkingSession.findOne({ _id: req.params.id });
     res.status(200).send(session);
-  });
+  } catch (err) {
+    next(err);
+  }
 });
 
-// Create a new parking session
-router.post('/', authenticate, function (req, res, next) {
-  const newSession = new ParkingSession(req.body);
-  newSession.save(function (err, savedSession) {
-    if (err) {
-      return next(err);
-    }
+
+// Create a new parking session - ok 
+router.post('/', authenticate, async (req, res, next) => {
+  try {
+    const newSession = new ParkingSession(req.body);
+    const savedSession = await newSession.save();
     res.status(201).send(savedSession);
-  });
+  } catch (err) {
+    next(err);
+  }
 });
 
-// Update parking session by ID
-router.put('/:id', authenticate, function (req, res, next) {
-  ParkingSession.findByIdAndUpdate(req.params.id, req.body, { new: true }).exec(function (err, updatedSession) {
-    if (err) {
-      return next(err);
-    }
+
+// Update parking session by ID - ok
+router.put('/:id', authenticate, async (req, res, next) => {
+  try {
+    const updatedSession = await ParkingSession.findByIdAndUpdate(req.params.id, req.body, { new: true });
     res.status(200).send(updatedSession);
-  });
+  } catch (err) {
+    next(err);
+  }
 });
 
-// Delete parking session by ID
-router.delete('/:id', authenticate, function (req, res, next) {
-  ParkingSession.findByIdAndRemove(req.params.id).exec(function (err, removedSession) {
-    if (err) {
-      return next(err);
-    }
+
+// Delete parking session by ID - ok
+router.delete('/:id', authenticate, async (req, res, next) => {
+  try {
+    const removedSession = await ParkingSession.findByIdAndDelete(req.params.id);
     res.status(200).send(removedSession);
-  });
+  } catch (err) {
+    next(err);
+  }
 });
 
 export default router;

@@ -1,7 +1,7 @@
 import mongoose, { Schema, model } from "mongoose";
 
 //create the user schema
-let parkSchema = new Schema({
+const parkSchema = new mongoose.Schema({
     id: {
         type: mongoose.ObjectId
     },

@@ -1,7 +1,7 @@
 import mongoose, { Schema, model } from "mongoose";
 
 //create the ParkingSession schema
-let parkingSessionSchema = new Schema({
+let parkingSessionSchema = new mongoose.Schema({
     id: {
         type: mongoose.ObjectId
     },

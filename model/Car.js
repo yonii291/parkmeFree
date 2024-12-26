@@ -3,7 +3,7 @@ import mongoose from "mongoose";
 const { Schema } = mongoose;
 
 // create the car schema
-const carSchema = new Schema({
+const carSchema = new mongoose.Schema({
     id: {
         type: mongoose.ObjectId
     },

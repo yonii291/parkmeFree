@@ -135,7 +135,7 @@ router.get("/:id", async (req, res, next) => {
  * @apiErrorExample {json} Error-Response (400):
  *     HTTP/1.1 400 Bad Request
  *     {
- *       "message": "Validation failed: model is required."
+ *       "message": "Validation failed: You must provide a license plate number!"
  *     }
  */
 

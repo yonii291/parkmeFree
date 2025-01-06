@@ -11,7 +11,8 @@
 import express from "express";
 import { Park } from "../model/Park.js";
 import authenticate from "../utils/auth.js";
-import upload from "../config/multerConfig.js";
+import cloudinary from "../config/cloudinaryConfig.js";
+import formidable from "formidable";
 
 const router = express.Router();
 
@@ -168,17 +169,26 @@ router.get("/:id", async (req, res, next) => {
  */
 
 // Create a new park - ok
-router.post("/create", authenticate, upload.single('image'), async (req, res) => {
-  try {
-    const newPark = new Park({
-      ...req.body,
-      picture: req.file.path
-    });
-    await newPark.save();
-    res.status(201).send({ newPark });
-  } catch (error) {
-    res.status(401).send(error.message);
-  }
+router.post("/create", authenticate, async (req, res) => {
+  const form = new formidable.IncomingForm();
+  form.parse(req, async (err, fields, files) => {
+    if (err) {
+      return res.status(400).send({ message: "Error parsing form" });
+    }
+    try {
+      const result = await cloudinary.uploader.upload(files.picture.path, {
+        folder: 'parks'
+      });
+      const newPark = new Park({
+        ...fields,
+        picture: result.secure_url
+      });
+      await newPark.save();
+      res.status(201).send({ newPark });
+    } catch (error) {
+      res.status(401).send(error.message);
+    }
+  });
 });
 
 /**

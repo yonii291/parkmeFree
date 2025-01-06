@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "nodemon",
-    "start": "node ./bin/start.js",
+    "start": "node --env-file=.env ./bin/start.js",
     "apidoc": "apidoc -i routes -o documentation"
   },
   "dependencies": {
@@ -15,10 +15,12 @@
     "cloudinary": "^2.5.1",
     "debug": "^4.3.4",
     "express": "^4.21.1",
+    "formidable": "^3.5.2",
     "http-errors": "^2.0.0",
     "jsonwebtoken": "^9.0.2",
     "mongoose": "^8.8.1",
-    "morgan": "^1.10.0"
+    "morgan": "^1.10.0",
+    "multer": "^1.4.5-lts.1"
   },
   "devDependencies": {
     "apidoc": "^1.2.0",

@@ -119,7 +119,7 @@ router.post("/register", async (req, res) => {
 // Get all users - ok
 router.get("/", async function (req, res, next) {
   try {
-    const users = await User.find().exec(); // Utilisation de await sans callback
+    const users = await User.find(); // Utilisation de await sans callback
     res.status(200).send(users);
   } catch (err) {
     next(err); // Gestion de l'erreur avec try/catch
@@ -235,7 +235,7 @@ router.put("/update/:id", authenticate, async function (req, res, next) {
   try {
     const updatedUser = await User.findByIdAndUpdate(req.params.id, req.body, {
       new: true,
-    }).exec();
+    });
     res.status(200).send(updatedUser);
   } catch (err) {
     next(err); // Gestion de l'erreur avec try/catch

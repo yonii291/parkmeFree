@@ -12,6 +12,7 @@
     "@onesignal/node-onesignal": "^5.0.0-alpha-01",
     "bcrypt": "^5.1.1",
     "bcryptjs": "^2.4.3",
+    "cloudinary": "^2.5.1",
     "debug": "^4.3.4",
     "express": "^4.21.1",
     "http-errors": "^2.0.0",

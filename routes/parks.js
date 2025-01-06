@@ -11,6 +11,8 @@
 import express from "express";
 import { Park } from "../model/Park.js";
 import authenticate from "../utils/auth.js";
+import upload from "../config/multerConfig.js";
+
 const router = express.Router();
 
 /**
@@ -166,9 +168,12 @@ router.get("/:id", async (req, res, next) => {
  */
 
 // Create a new park - ok
-router.post("/create", authenticate, async (req, res) => {
+router.post("/create", authenticate, upload.single('image'), async (req, res) => {
   try {
-    const newPark = new Park(req.body);
+    const newPark = new Park({
+      ...req.body,
+      picture: req.file.path
+    });
     await newPark.save();
     res.status(201).send({ newPark });
   } catch (error) {

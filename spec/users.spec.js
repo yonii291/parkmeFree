@@ -35,6 +35,7 @@ describe("POST /register", function () {
         expect(res.body.email).toEqual('johndoe@gmail.com');
         expect(res.body.admin).toEqual(false);
         expect(res.body).toContainAllKeys(['_id', 'admin', 'firstName', 'lastName', 'userName', 'email', 'creationDate'])
+
     });
 
     //Create a users with empty fields
@@ -153,7 +154,7 @@ describe('GET /users/allUsers', function () {
     test('should not retrieve the specific user', async function () {
         //Create a car and a park to parkingSessions
         let car, park;
- 
+
         // Créer une voiture et un parc en parallèle
         [car, park] = await Promise.all([
             Car.create({

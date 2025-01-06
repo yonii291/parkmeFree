@@ -177,11 +177,11 @@ router.post("/create", authenticate, async (req, res) => {
     }
     try {
       const result = await cloudinary.uploader.upload(files.picture.path, {
-        folder: 'parks'
+        folder: "parks",
       });
       const newPark = new Park({
         ...fields,
-        picture: result.secure_url
+        picture: result.secure_url,
       });
       await newPark.save();
       res.status(201).send({ newPark });

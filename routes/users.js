@@ -58,7 +58,7 @@ const router = express.Router();
  */
 router.post("/register", async (req, res, next) => {
   try {
-    const { email, userName } = req.body;
+    const { email, userName, password } = req.body;
 
     // Check if the user already exists
     const existingUser = await User.findOne({ $or: [{ email }, { userName }] });
@@ -66,36 +66,38 @@ router.post("/register", async (req, res, next) => {
       return res.status(409).send({ message: "User already exists" });
     }
 
-    const plainPassword = req.body.password;
+    // Hash the password
     const costFactor = 10;
-    bcrypt.hash(
-      plainPassword,
-      costFactor,
-      async function (err, hashedPassword) {
-        if (err) {
-          return next(err);
-        }
-        const user = new User({
-          ...req.body,
-          password: hashedPassword,
-        });
-        await user.save();
-        res.status(201).send(user);
+    bcrypt.hash(password, costFactor, async function (err, hashedPassword) {
+      if (err) {
+        return res.status(500).send({ message: "Error hashing the password" });
       }
-    );
-  } catch (error) {
-    next(error);
-  }
-  ///créer un token pour que l'utilisateur soit connecté directement
-  const exp = Math.floor(Date.now() / 1000) + 7 * 24 * 3600;
-  const payload = { sub: user._id.toString(), exp: exp };
-  jwt.sign(payload, secretKey, function (err, token) {
-    if (err) {
-      return next(err);
-    }
-    res.status(201).send({ token: token });
-  });
 
+      // Create a new user
+      const user = new User({
+        ...req.body,
+        password: hashedPassword,
+      });
+
+      try {
+        await user.save();
+
+        // Generate a JWT token
+        const exp = Math.floor(Date.now() / 1000) + 7 * 24 * 3600; // Expires in 7 days
+        const payload = { sub: user._id.toString(), exp: exp };
+        jwt.sign(payload, secretKey, function (err, token) {
+          if (err) {
+            return res.status(500).send({ message: "Error generating the token" });
+          }
+          res.status(201).send({ id: user._id, token: token });
+        });
+      } catch (saveError) {
+        res.status(500).send({ message: "Error saving the user" });
+      }
+    });
+  } catch (error) {
+    res.status(500).send({ message: "Error registering the user" });
+  }
 });
 
 /**

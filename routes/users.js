@@ -262,6 +262,7 @@ router.put("/update/:id", authenticate, async function (req, res, next) {
   try {
     const updatedUser = await User.findByIdAndUpdate(req.params.id, req.body, {
       new: true,
+      runValidators: true,
     });
     res.status(200).send(updatedUser);
   } catch (err) {

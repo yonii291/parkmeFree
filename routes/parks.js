@@ -249,6 +249,7 @@ router.put("/:id", authenticate, async (req, res, next) => {
   try {
     const updatedPark = await Park.findByIdAndUpdate(req.params.id, req.body, {
       new: true,
+      runValidators: true,
     });
     if (!updatedPark) {
       return res.status(404).send({ message: "Park not found" });

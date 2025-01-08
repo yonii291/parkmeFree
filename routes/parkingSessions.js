@@ -219,7 +219,10 @@ router.put("/:id", authenticate, async (req, res, next) => {
     const updatedSession = await ParkingSession.findByIdAndUpdate(
       req.params.id,
       req.body,
-      { new: true }
+      {
+        new: true,
+        runValidators: true,
+      }
     );
     res.status(200).send(updatedSession);
   } catch (err) {

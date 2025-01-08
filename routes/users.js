@@ -71,33 +71,36 @@ router.post("/register", async (req, res, next) => {
 
     // Hash the password
     const costFactor = 10;
-    bcrypt.hash(plainPassword, costFactor, async function (err, hashedPassword) {
+    bcrypt.hash(password, costFactor, async function (err, hashedPassword) {
       if (err) {
-        return next(err);
+        return res.status(500).send({ message: "Error hashing the password" });
       }
+
+      // Create a new user
       const user = new User({
         ...req.body,
         password: hashedPassword,
       });
 
-      await user.save();
+      try {
+        await user.save();
 
-      ///créer un token pour que l'utilisateur soit connecté directement
-      const exp = Math.floor(Date.now() / 1000) + 7 * 24 * 3600;
-      const payload = { sub: user._id.toString(), exp: exp };
-      jwt.sign(payload, secretKey, function (err, token) {
-        if (err) {
-          return next(err);
-        }
-
-        res.status(201).send({ ...user._doc, token: token });
-      });
+        // Generate a JWT token
+        const exp = Math.floor(Date.now() / 1000) + 7 * 24 * 3600; // Expires in 7 days
+        const payload = { sub: user._id.toString(), exp: exp };
+        jwt.sign(payload, secretKey, function (err, token) {
+          if (err) {
+            return res.status(500).send({ message: "Error generating the token" });
+          }
+          res.status(201).send({ ...user._doc, token: token });
+        });
+      } catch (saveError) {
+        res.status(500).send({ message: "Error saving the user" });
+      }
     });
   } catch (error) {
-    next(error);
+    res.status(500).send({ message: "Error registering the user" });
   }
-
-
 });
 
 /**
@@ -259,6 +262,7 @@ router.put("/update/:id", authenticate, async function (req, res, next) {
   try {
     const updatedUser = await User.findByIdAndUpdate(req.params.id, req.body, {
       new: true,
+      runValidators: true,
     });
     res.status(200).send(updatedUser);
   } catch (err) {

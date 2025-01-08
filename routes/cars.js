@@ -192,6 +192,7 @@ router.put("/:id", authenticate, async (req, res, next) => {
   try {
     const updatedCar = await Car.findByIdAndUpdate(req.params.id, req.body, {
       new: true,
+      runValidators: true,
     });
     if (!updatedCar) {
       return res.status(404).send({ message: "Car not found" });

@@ -1,9 +1,12 @@
 import express from "express";
 import { User } from "../model/User.js";
+import jwt from "jsonwebtoken";
 import authenticate from "../utils/auth.js";
 import bcrypt from "bcryptjs";
+import config from "../config/config.js";
 
 const router = express.Router();
+const secretKey = config.jwtSecret;
 
 /**
  * @api {post} /users/register Register a new user
@@ -68,33 +71,32 @@ router.post("/register", async (req, res, next) => {
 
     const plainPassword = req.body.password;
     const costFactor = 10;
-    bcrypt.hash(
-      plainPassword,
-      costFactor,
-      async function (err, hashedPassword) {
+    bcrypt.hash(plainPassword, costFactor, async function (err, hashedPassword) {
+      if (err) {
+        return next(err);
+      }
+      const user = new User({
+        ...req.body,
+        password: hashedPassword,
+      });
+
+      await user.save();
+
+      ///créer un token pour que l'utilisateur soit connecté directement
+      const exp = Math.floor(Date.now() / 1000) + 7 * 24 * 3600;
+      const payload = { sub: user._id.toString(), exp: exp };
+      jwt.sign(payload, secretKey, function (err, token) {
         if (err) {
           return next(err);
         }
-        const user = new User({
-          ...req.body,
-          password: hashedPassword,
-        });
-        await user.save();
-        res.status(201).send(user);
-      }
-    );
+
+        res.status(201).send({ ...user._doc, token: token });
+      });
+    });
   } catch (error) {
     next(error);
   }
-  ///créer un token pour que l'utilisateur soit connecté directement
-  const exp = Math.floor(Date.now() / 1000) + 7 * 24 * 3600;
-  const payload = { sub: user._id.toString(), exp: exp };
-  jwt.sign(payload, secretKey, function (err, token) {
-    if (err) {
-      return next(err);
-    }
-    res.status(201).send({ token: token });
-  });
+
 
 });
 

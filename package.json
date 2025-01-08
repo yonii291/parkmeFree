@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "nodemon",
-    "start": "node --env-file=.env ./bin/start.js",
+    "start": "node ./bin/start.js",
     "apidoc": "apidoc -i routes -o documentation"
   },
   "dependencies": {

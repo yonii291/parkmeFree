@@ -57,7 +57,7 @@ const router = express.Router();
  */
 
 // Get all parks - ok
-router.get("/", async function (req, res, next) {
+router.get("/", authenticate, async function (req, res, next) {
   try {
     const parkings = await Park.find().exec(); // Utilisation de await sans callback
     res.status(200).send(parkings);
@@ -108,7 +108,7 @@ router.get("/", async function (req, res, next) {
  */
 
 // Get park by ID - ok
-router.get("/:id", async (req, res, next) => {
+router.get("/:id", authenticate, async (req, res, next) => {
   try {
     const park = await Park.findOne({ _id: req.params.id });
     if (!park) {

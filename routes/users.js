@@ -74,6 +74,16 @@ router.post("/register", async (req, res) => {
   } catch (error) {
     res.status(400).send(error.message);
   }
+  ///créer un token pour que l'utilisateur soit connecté directement
+  // const exp = Math.floor(Date.now() / 1000) + 7 * 24 * 3600;
+  // const payload = { sub: user._id.toString(), exp: exp };
+  // jwt.sign(payload, secretKey, function (err, token) {
+  //   if (err) {
+  //     return next(err);
+  //   }
+  //   res.status(201).send({ token: token });
+  // });
+
 });
 
 /**

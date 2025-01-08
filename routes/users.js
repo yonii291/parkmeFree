@@ -42,6 +42,7 @@ const router = express.Router();
  *     }
  *
  * @apiError (400) BadRequest Validation error or missing fields.
+ * @apiError (409) Conflict User already exists.
  * @apiError (500) InternalServerError An error occurred while registering the user.
  *
  * @apiErrorExample {json} Error-Response (400):
@@ -49,11 +50,22 @@ const router = express.Router();
  *     {
  *       "message": "Validation failed: You must provide a valid email!"
  *     }
+ * @apiErrorExample {json} Error-Response (409):
+ *     HTTP/1.1 409 Conflict
+ *     {
+ *       "message": "User already exists"
+ *     }
  */
-
-// Create a new user - ok
-router.post("/register", async (req, res) => {
+router.post("/register", async (req, res, next) => {
   try {
+    const { email, userName } = req.body;
+
+    // Check if the user already exists
+    const existingUser = await User.findOne({ $or: [{ email }, { userName }] });
+    if (existingUser) {
+      return res.status(409).send({ message: "User already exists" });
+    }
+
     const plainPassword = req.body.password;
     const costFactor = 10;
     bcrypt.hash(
@@ -61,18 +73,18 @@ router.post("/register", async (req, res) => {
       costFactor,
       async function (err, hashedPassword) {
         if (err) {
-          return res.status(500).send(err.message);
+          return next(err);
         }
         const user = new User({
           ...req.body,
           password: hashedPassword,
         });
         await user.save();
-        res.status(201).send({ user });
+        res.status(201).send(user);
       }
     );
   } catch (error) {
-    res.status(400).send(error.message);
+    next(error);
   }
   ///créer un token pour que l'utilisateur soit connecté directement
   // const exp = Math.floor(Date.now() / 1000) + 7 * 24 * 3600;

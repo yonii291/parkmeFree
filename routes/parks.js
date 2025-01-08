@@ -23,6 +23,8 @@ const router = express.Router();
  * @apiVersion 1.0.0
  * @apiDescription Retrieve a list of all parks.
  *
+ * @apiHeader {String} Authorization User's access token.
+ *
  * @apiSuccess {ObjectId} id Unique identifier for the park.
  * @apiSuccess {String} name Name of the park.
  * @apiSuccess {Number} height Height of the park.
@@ -73,6 +75,7 @@ router.get("/", authenticate, async function (req, res, next) {
  * @apiVersion 1.0.0
  * @apiDescription Retrieve a specific park by its ID.
  *
+ * @apiHeader {String} Authorization User's access token.
  * @apiParam {String} id Park's unique ID.
  *
  * @apiSuccess {ObjectId} id Unique identifier for the park.

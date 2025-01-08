@@ -23,6 +23,8 @@ const router = express.Router();
  * @apiVersion 1.0.0
  * @apiDescription Retrieve a list of all parks.
  *
+ * @apiHeader {String} Authorization User's access token.
+ *
  * @apiSuccess {ObjectId} id Unique identifier for the park.
  * @apiSuccess {String} name Name of the park.
  * @apiSuccess {Number} height Height of the park.
@@ -57,7 +59,7 @@ const router = express.Router();
  */
 
 // Get all parks - ok
-router.get("/", async function (req, res, next) {
+router.get("/", authenticate, async function (req, res, next) {
   try {
     const parkings = await Park.find().exec(); // Utilisation de await sans callback
     res.status(200).send(parkings);
@@ -73,6 +75,7 @@ router.get("/", async function (req, res, next) {
  * @apiVersion 1.0.0
  * @apiDescription Retrieve a specific park by its ID.
  *
+ * @apiHeader {String} Authorization User's access token.
  * @apiParam {String} id Park's unique ID.
  *
  * @apiSuccess {ObjectId} id Unique identifier for the park.
@@ -108,7 +111,7 @@ router.get("/", async function (req, res, next) {
  */
 
 // Get park by ID - ok
-router.get("/:id", async (req, res, next) => {
+router.get("/:id", authenticate, async (req, res, next) => {
   try {
     const park = await Park.findOne({ _id: req.params.id });
     if (!park) {
@@ -177,11 +180,11 @@ router.post("/create", authenticate, async (req, res) => {
     }
     try {
       const result = await cloudinary.uploader.upload(files.picture.path, {
-        folder: 'parks'
+        folder: "parks",
       });
       const newPark = new Park({
         ...fields,
-        picture: result.secure_url
+        picture: result.secure_url,
       });
       await newPark.save();
       res.status(201).send({ newPark });

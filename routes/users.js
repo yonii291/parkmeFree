@@ -61,7 +61,7 @@ const secretKey = config.jwtSecret;
  */
 router.post("/register", async (req, res, next) => {
   try {
-    const { email, userName } = req.body;
+    const { email, userName, password } = req.body;
 
     // Check if the user already exists
     const existingUser = await User.findOne({ $or: [{ email }, { userName }] });
@@ -69,7 +69,7 @@ router.post("/register", async (req, res, next) => {
       return res.status(409).send({ message: "User already exists" });
     }
 
-    const plainPassword = req.body.password;
+    // Hash the password
     const costFactor = 10;
     bcrypt.hash(plainPassword, costFactor, async function (err, hashedPassword) {
       if (err) {

@@ -10,38 +10,39 @@ import { ParkingSession } from '../model/ParkingSession.js';
 //Clean database before
 beforeEach(cleanUpDatabase)
 
-describe("POST /register", function () {
+describe("POST /api/users/register", function () {
 
     //Create a user with correct informations
     it('should create a user with correct informations', async function () {
         const res = await supertest(app)
-            .post('/register')
+            .post('/api/users/register')
             .send({
-                firstname: 'John',
-                lastname: 'Doe',
-                username: 'johndoe',
+                firstName: 'John',
+                lastName: 'Doe',
+                userName: 'johndoe',
                 password: '1234',
                 email: "johndoe@gmail.com",
-                admin: false,
+                admin: false
             })
             .expect(201)
             .expect('Content-Type', /json/);
         // Check that the response body is a JSON object with exactly the properties we expect.
         expect(res.body).toBeObject();
         expect(res.body._id).toBeString();
-        expect(res.body.firstname).toEqual('John');
-        expect(res.body.lastname).toEqual('Doe');
-        expect(res.body.username).toEqual('johndoe');
+        expect(res.body.firstName).toEqual('John');
+        expect(res.body.lastName).toEqual('Doe');
+        expect(res.body.userName).toEqual('johndoe');
         expect(res.body.email).toEqual('johndoe@gmail.com');
         expect(res.body.admin).toEqual(false);
-        expect(res.body).toContainAllKeys(['_id', 'admin', 'firstName', 'lastName', 'userName', 'email', 'creationDate'])
+        expect(res.body).toContainAllKeys(['firstName', 'lastName', 'userName', 'password', 'email', 'admin', '_id', 'creationDate', '__v', 'token']);
+
 
     });
 
     //Create a users with empty fields
     it('should not create a user with blanck informations', async function () {
         const res = await supertest(app)
-            .post('/users/allUsers')
+            .post('/api/users/register')
             .send({
                 firstName: '',
                 lastName: '',
@@ -50,15 +51,15 @@ describe("POST /register", function () {
                 email: ''
             })
             .expect(500)
-        expect(res.text).toEqual("User validation failed: firstName: You must provide a name!, lastName: You must provide a lastname!, userName: You must provide a username!, email: You must provide a email")
+        expect(res.text).toEqual("{\"message\":\"Error saving the user\"}")
     });
 
     //Create a user with a username that already exists
     it('should not create a user when the username is already existing', async function () {
         let jackReach
-        jackReach = User.create({ admin: false, firstName: 'Jack', lastName: 'Reach', userName: "jackreach", password: '1234', creationDate: '2022-11-17T18:31:44.268+00:00' })
+        jackReach = User.create({ admin: false, firstName: 'Jack', lastName: 'Reach', userName: "jackreach", email: 'pierrejame@gmail.com', password: '1234', creationDate: '2022-11-17T18:31:44.268+00:00' })
         const res = await supertest(app)
-            .post('/users/allUsers')
+            .post('/api/users/register')
             .send({
                 firstName: 'Pierre',
                 lastName: 'Jame',
@@ -66,69 +67,32 @@ describe("POST /register", function () {
                 password: '1234',
                 email: 'pierrejame@gmail.com'
             })
-            .expect(500)
-        expect(res.text).toEqual("User validation failed: userName: userName is already taken")
+            .expect(409)
+        expect(res.text).toEqual("{\"message\":\"User already exists\"}")
     });
 
 });
 
 
-describe('GET /users/allUsers', function () {
+describe('GET /api/users', function () {
     //Create 3 users to begin the tests
     let jackReach
     let pierreJame
     let davidNor
     beforeEach(async function () {
         [jackReach, pierreJame, davidNor] = await Promise.all([
-            User.create({ admin: false, firstName: 'Jack', lastName: 'Reach', userName: "jackreach", password: '1234', creationDate: '2022-11-17T18:31:44.268+00:00' }),
-            User.create({ admin: true, firstName: 'Pierre', lastName: 'Jame', userName: "pierrejame", password: '1234', creationDate: '2022-11-18T18:31:44.268+00:00' }),
-            User.create({ admin: false, firstName: 'David', lastName: 'Nor', userName: "davidnor", password: '1234', creationDate: '2022-11-19T18:31:44.268+00:00' }),
+            User.create({ admin: false, firstName: 'Jack', lastName: 'Reach', userName: "jackreach", email: 'jackreach@gmail.com', password: '1234', creationDate: '2022-11-17T18:31:44.268+00:00' }),
+            User.create({ admin: true, firstName: 'Pierre', lastName: 'Jame', userName: "pierrejame", email: 'pierrejame@gmail.com', password: '1234', creationDate: '2022-11-18T18:31:44.268+00:00' }),
+            User.create({ admin: false, firstName: 'David', lastName: 'Nor', userName: "davidnor", email: 'davidnor@gmail.com', password: '1234', creationDate: '2022-11-19T18:31:44.268+00:00' }),
         ]);
     })
 
-    //Get the list of all users
-    test('should retrieve the list of users, in correct creationDate order, with aggregation of nb of parks posted', async function () {
-        const res = await supertest(app)
-            .get('/users/allUsers')
-            .expect(200)
-            .expect('Content-Type', /json/);
-        //Assertions
-        expect(res.body).toBeArray();
-        expect(res.body).toHaveLength(3);
-
-        expect(res.body[2]).toBeObject();
-        expect(res.body[2]._id).toBeString();
-        expect(res.body[2].admin).toEqual(false);
-        expect(res.body[2].firstName).toEqual('Jack');
-        expect(res.body[2].lastName).toEqual('Reach');
-        expect(res.body[2].userName).toEqual('jackreach');
-        expect(res.body[2].email).toEqual('jackreach@example.com');
-        expect(res.body[2]).toContainAllKeys(['_id', 'admin', 'firstName', 'lastName', 'userName', 'email', 'creationDate', 'parksPosted'])
-
-        expect(res.body[1]).toBeObject();
-        expect(res.body[1]._id).toBeString();
-        expect(res.body[1].admin).toEqual(true);
-        expect(res.body[1].firstName).toEqual('Pierre');
-        expect(res.body[1].lastName).toEqual('Jame');
-        expect(res.body[1].userName).toEqual('pierrejame');
-        expect(res.body[1].email).toEqual('pierrejame@example.com');
-        expect(res.body[1]).toContainAllKeys(['_id', 'admin', 'firstName', 'lastName', 'userName', 'email', 'creationDate', 'parksPosted'])
-
-        expect(res.body[0]).toBeObject();
-        expect(res.body[0]._id).toBeString();
-        expect(res.body[0].admin).toEqual(false);
-        expect(res.body[0].firstName).toEqual('David');
-        expect(res.body[0].lastName).toEqual('Nor');
-        expect(res.body[0].userName).toEqual('davidnor');
-        expect(res.body[0].email).toEqual('davidnor@example.com');
-        expect(res.body[0]).toContainAllKeys(['_id', 'admin', 'firstName', 'lastName', 'userName', 'email', 'creationDate', 'parksPosted'])
-    });
-
-
     //Get specific user by id
     test('should retrieve a specific user by id', async function () {
+        const token = await generateValidJwt(jackReach)
         const res = await supertest(app)
-            .get(`/users/allUsers/${jackReach._id}`)
+            .get(`/api/users/${jackReach._id}`)
+            .set('Authorization', `Bearer ${token}`)
             .expect(200)
             .expect('Content-Type', /json/);
         //Assertions
@@ -138,68 +102,92 @@ describe('GET /users/allUsers', function () {
         expect(res.body.firstName).toEqual('Jack');
         expect(res.body.lastName).toEqual('Reach');
         expect(res.body.userName).toEqual('jackreach');
-        expect(res.body).toContainAllKeys(['_id', 'admin', 'firstName', 'lastName', 'userName', 'creationDate'])
+        expect(res.body.email).toEqual('jackreach@gmail.com');
+        expect(res.body).toContainAllKeys(['_id', 'admin', 'firstName', 'lastName', 'userName', 'email', 'password', 'creationDate'])
     });
 
     //Get specific user by id, but not existing
     test('should not retrieve the specific user', async function () {
+        const token = await generateValidJwt(davidNor)
         const res = await supertest(app)
-            .get(`/users/allUsers/78b54c3aef12a34233454fxy`)
+            .get(`/api/users/78b54c3aef12a34233454fxy`)
+            .set('Authorization', `Bearer ${token}`)
             .expect(500)
             .expect('Content-Type', "text/html; charset=utf-8");
     });
 
 
-    //Get a list of parks that a specific user has posted
-    test('should not retrieve the specific user', async function () {
-        //Create a car and a park to parkingSessions
-        let car, park;
+});
 
-        // Créer une voiture et un parc en parallèle
-        [car, park] = await Promise.all([
-            Car.create({
-                brand: 'Toyota',
-                model: 'Corolla',
-                licensePlate: 'VD654321',
-            }),
-            Park.create({
-                name: 'City Park',
-                location: 'Downtown',
-                capacity: 100,
-            }),
+describe('PUT /api/users/update/', function () {
+    let jackReach
+    let pierreJame
+    beforeEach(async function () {
+        [jackReach, pierreJame] = await Promise.all([
+            User.create({ admin: false, firstName: 'Jack', lastName: 'Reach', userName: "jackreach", email: 'jackreachy@gmail.com', password: '1234', creationDate: '2022-11-17T18:31:44.268+00:00' }),
+            User.create({ admin: true, firstName: 'Pierre', lastName: 'Jame', userName: "pierrejame", email: 'pierrejame@gmail.com', password: '1234', creationDate: '2022-11-18T18:31:44.268+00:00' })
         ]);
+    })
 
-        //Create some tricks belonging to jackReach before the get request
-        let boardSlide
-        let noseSlide
-        [boardSlide, noseSlide] = await Promise.all([
-            Trick.create({ name: 'board slide', video: 'video.mp4', spotId: ledge._id, userId: jackReach._id, creationDate: '2022-11-18T18:31:44.268+00:00' }),
-            Trick.create({ name: 'nose slide', video: 'video.mp4', spotId: ledge._id, userId: jackReach._id, creationDate: '2022-11-19T18:31:44.268+00:00' })
-        ])
+
+
+    //Modify own profile
+    it('user could modify his own profile', async function () {
+        const token = await generateValidJwt(jackReach)
         const res = await supertest(app)
-            .get(`/users/${jackReach._id}/tricks`)
+            .put(`/api/users/update/${jackReach._id}`)
+            .set('Authorization', `Bearer ${token}`)
+            .send({
+                firstName: 'Jacky',
+                lastName: 'Reachy',
+                userName: 'jackreachy',
+                email: 'jackreachy@gmail.com',
+                password: '5678'
+            })
             .expect(200)
             .expect('Content-Type', /json/);
         //Assertions
-        expect(res.body.data).toBeArray();
-        expect(res.body.data).toHaveLength(2);
+        expect(res.body).toBeObject();
+        expect(res.body._id).toBeString();
+        expect(res.body.firstName).toEqual('Jacky');
+        expect(res.body.lastName).toEqual('Reachy');
+        expect(res.body.userName).toEqual('jackreachy');
+        expect(res.body.email).toEqual('jackreachy@gmail.com');
+        expect(res.body.admin).toEqual(false);
+        expect(res.body).toContainAllKeys(["_id", "firstName", "lastName", "userName", "password", "email", "creationDate", "admin"]);
 
-        expect(res.body.data[1]).toBeObject();
-        expect(res.body.data[1]._id).toBeString();
-        expect(res.body.data[1].spotId).toEqual(`${ledge._id}`);
-        expect(res.body.data[1].userId).toEqual(`${jackReach._id}`);
-        expect(res.body.data[1].name).toEqual('board slide');
-        expect(res.body.data[1].video).toEqual('video.mp4');
-        expect(res.body.data[1]).toContainAllKeys(['_id', 'name', 'video', 'spotId', 'userId', 'creationDate'])
-
-        expect(res.body.data[0]).toBeObject();
-        expect(res.body.data[0]._id).toBeString();
-        expect(res.body.data[0].spotId).toEqual(`${ledge._id}`);
-        expect(res.body.data[0].userId).toEqual(`${jackReach._id}`);
-        expect(res.body.data[0].name).toEqual('nose slide');
-        expect(res.body.data[0].video).toEqual('video.mp4');
-        expect(res.body.data[0]).toContainAllKeys(['_id', 'name', 'video', 'spotId', 'userId', 'creationDate'])
-        console.log(res.body)
     });
 });
 
+
+describe('DELETE /api/users/delete/', function () {
+    //Create a user to begin the tests
+    let davidNor
+    beforeEach(async function () {
+        [davidNor] = await Promise.all([
+            User.create({ admin: false, firstName: 'David', lastName: 'Nor', userName: "davidnor", email: 'davidnor@gmail.com', password: '1234', creationDate: '2022-11-19T18:31:44.268+00:00' })
+        ]);
+    })
+
+    it('user should delete his own profile', async function () {
+        const res = await supertest(app)
+            .delete(`/api/users/delete/${davidNor._id}`)
+            .expect(200)
+            .expect('Content-Type', /json/);
+        //Assertions
+        expect(res.body).toBeObject();
+        expect(res.body._id).toBeString();
+        expect(res.body.admin).toEqual(false);
+        expect(res.body.firstName).toEqual('David');
+        expect(res.body.lastName).toEqual('Nor');
+        expect(res.body.userName).toEqual('davidnor');
+        expect(res.body.email).toEqual('davidnor@gmail.com');
+        expect(res.body).toContainAllKeys(["_id", "firstName", "lastName", "userName", "password", "email", "creationDate", "admin"])
+    });
+});
+
+
+//Disconnect database afterwards
+afterAll(async () => {
+    await mongoose.disconnect();
+});

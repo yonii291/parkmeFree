@@ -3,6 +3,9 @@ import {Car} from '../model/Car.js';
 import { Park } from '../model/Park.js';
 import { ParkingSession } from '../model/ParkingSession.js';
 import jwt from "jsonwebtoken";
+import config from "../config/config.js"
+
+const secretKey = config.jwtSecret
 
 export const cleanUpDatabase = async function () {
     await Promise.all([
@@ -19,7 +22,7 @@ export function generateValidJwt(user) {
     const exp = (new Date().getTime() + 7 * 24 * 3600 * 1000) / 1000;
     const claims = { sub: user._id.toString(), exp: exp };
     return new Promise((resolve, reject) => {
-        jwt.sign(claims, process.env.SECRET_KEY, function (err, token) {
+        jwt.sign(claims, secretKey, function (err, token) {
             if (err) {
                 return reject(err);
             }

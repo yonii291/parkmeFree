@@ -6,6 +6,10 @@ const carSchema = new mongoose.Schema({
     id: {
         type: mongoose.ObjectId
     },
+    user_id: {
+            type: mongoose.ObjectId,
+            required: [true, 'You must provide a user_id!']
+    },
     model: {
         type: String,
         required: [true, 'You must provide a name!'],

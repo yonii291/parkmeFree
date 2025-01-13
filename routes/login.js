@@ -19,11 +19,13 @@ const secretKey = config.jwtSecret;
  * @apiBody {String} password User's password (required).
  *
  * @apiSuccess {String} token JWT token for the authenticated user.
+ * @apiSuccess {String} id User's unique ID.
  *
  * @apiSuccessExample {json} Success-Response:
  *     HTTP/1.1 200 OK
  *     {
- *       "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+ *       "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...",
+ *       "id": "60c72b2f9af1b8b9b0f9a1b5"
  *     }
  *
  * @apiError (401) Unauthorized Invalid email or password.
@@ -38,35 +40,32 @@ const secretKey = config.jwtSecret;
 
 router.post("/", async (req, res) => {
   try {
-    await User.findOne({ email: req.body.email })
-      .then((user) => {
-        //Si pas d'utilisateur
-        if (!user) {
-          return res.sendStatus(401).send({ message: "User not found" });
+    const user = await User.findOne({ email: req.body.email });
+    if (!user) {
+      return res.status(401).send({ message: "User not found" });
+    }
+
+    bcrypt.compare(req.body.password, user.password, function (err, valid) {
+      if (err) {
+        return res.status(500).send({ message: "Error comparing passwords" });
+      } else if (!valid) {
+        return res.status(401).send({ message: "Invalid password" });
+      }
+
+      // Generate a JWT token
+      const exp = Math.floor(Date.now() / 1000) + 7 * 24 * 3600; // Expires in 7 days
+      const payload = { sub: user._id.toString(), exp: exp };
+      jwt.sign(payload, secretKey, function (err, token) {
+        if (err) {
+          return res
+            .status(500)
+            .send({ message: "Error generating the token" });
         }
-        //Validate the password with bcrypt
-        bcrypt.compare(req.body.password, user.password, function (err, valid) {
-          if (err) {
-            return next(err);
-          } else if (!valid) {
-            return res.sendStatus(401);
-          }
-          //Generate a valid JWT that expires in 7 days
-          const exp = Math.floor(Date.now() / 1000) + 7 * 24 * 3600;
-          const payload = { sub: user._id.toString(), exp: exp };
-          jwt.sign(payload, secretKey, function (err, token) {
-            if (err) {
-              return next(err);
-            }
-            res.status(200).send({ token: token });
-          });
-        });
-      })
-      .catch((err) => {
-        return next(err);
+        res.status(200).send({ token: token, id: user._id });
       });
+    });
   } catch (error) {
-    res.status(500).send(error.message);
+    res.status(500).send({ message: "Error logging in the user" });
   }
 });
 

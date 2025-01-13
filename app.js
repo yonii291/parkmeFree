@@ -10,6 +10,7 @@ import parksRouter from "./routes/parks.js";
 import parkingSessionsRouter from "./routes/parkingSessions.js";
 import notificationsRouter from "./routes/notifications.js";
 import mongoose from "mongoose";
+import cors from "cors";
 
 ///DATABASE CONNECTION
 mongoose
@@ -18,6 +19,16 @@ mongoose
   .catch((err) => console.log("Error connecting to MongoDB", err));
 
 const app = express();
+
+// Allow requests from frontend's Render URL
+const allowedOrigins = ['https://parkmefree.onrender.com', 'http://localhost:5173'];
+app.use(
+  cors({
+    origin: allowedOrigins,
+    methods: ["GET", "POST", "PUT", "DELETE"], // Allowed HTTP methods
+    credentials: true, // If using cookies or authorization headers
+  })
+);
 
 app.use("/documentation", express.static("documentation"));
 

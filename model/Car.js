@@ -20,7 +20,7 @@ const carSchema = new mongoose.Schema({
     type: String,
     required: [true, "You must provide a license plate number!"],
     unique: true,
-    maxLength: 9,
+    maxLength: 15,
     minLength: 1,
   },
 
@@ -28,6 +28,14 @@ const carSchema = new mongoose.Schema({
     type: Date,
     default: Date.now,
   },
+});
+
+// Middleware to remove spaces from license_plate
+carSchema.pre("validate", function (next) {
+  if (this.license_plate) {
+    this.license_plate = this.license_plate.replace(/\s+/g, "");
+  }
+  next();
 });
 
 //Hide the _v to the api users

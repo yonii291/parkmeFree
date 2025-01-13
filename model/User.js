@@ -49,8 +49,8 @@ const userSchema = new mongoose.Schema({
 
   car_id: {
     type: mongoose.ObjectId,
-    required: false, 
-
+    required: false,
+  },
   admin: {
     type: Boolean,
     default: false,

@@ -24,11 +24,6 @@ const carSchema = new mongoose.Schema({
     minLength: 1,
   },
 
-  user_id: {
-    type: mongoose.ObjectId,
-    required: [true, "You must provide a user_id!"],
-  },
-
   creationDate: {
     type: Date,
     default: Date.now,

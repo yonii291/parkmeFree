@@ -49,8 +49,7 @@ const userSchema = new mongoose.Schema({
 
   car_id: {
     type: mongoose.ObjectId,
-    required: [true, "You must provide a car_id!"],
-  },
+    required: false, 
 
   admin: {
     type: Boolean,

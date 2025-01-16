@@ -20,8 +20,13 @@ mongoose
 
 const app = express();
 
+app.use("/documentation", express.static("documentation"));
+
 // Allow requests from frontend's Render URL
-const allowedOrigins = ['https://parkmefree-4y8d.onrender.com', 'http://localhost:5173'];
+const allowedOrigins = [
+  "https://parkmefree-4y8d.onrender.com",
+  "http://localhost:5173",
+];
 app.use(
   cors({
     origin: allowedOrigins,
@@ -29,8 +34,6 @@ app.use(
     credentials: true, // If using cookies or authorization headers
   })
 );
-
-app.use("/documentation", express.static("documentation"));
 
 app.use(logger("dev"));
 app.use(express.json());

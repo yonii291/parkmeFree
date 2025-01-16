@@ -27,16 +27,8 @@ const carSchema = new mongoose.Schema({
         type: Date,
         default: Date.now
     }
-
-<<<<<<< HEAD
 })
-=======
-  creationDate: {
-    type: Date,
-    default: Date.now,
-  },
-});
->>>>>>> 0b51acfb35ff5c82b40d359d8e341cf60b2c7ebf
+
 
 //Hide the _v to the api users
 carSchema.set("toJSON", {

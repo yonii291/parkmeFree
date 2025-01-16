@@ -144,7 +144,11 @@ router.post("/register", async (req, res, next) => {
  */
 
 // Get all users - ok
-router.get("/", async function (req, res, next) {
+router.get("/", authenticate, async function (req, res, next) {
+  // uniquement les admins peuvent voir tous les users
+  if (!req.params.admin) {
+    return res.status(403).send({ message: "You are not authorized to perform this action" });
+  }
   try {
     const users = await User.find(); // Utilisation de await sans callback
     res.status(200).send(users);
@@ -314,7 +318,7 @@ router.put("/update/:id", authenticate, async function (req, res, next) {
  */
 
 //supprime un user - ok
-router.delete("/delete/:id", async function (req, res, next) {
+router.delete("/delete/:id", authenticate, async function (req, res, next) {
   try {
     const removedUser = await User.findByIdAndDelete(req.params.id).exec();
 

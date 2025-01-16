@@ -59,14 +59,44 @@ const router = express.Router();
  */
 
 // Get all parks - ok
-router.get("/", authenticate, async function (req, res, next) {
+router.get('/', authenticate, async (req, res, next) => {
   try {
-    const parkings = await Park.find().exec(); // Utilisation de await sans callback
-    res.status(200).send(parkings);
+    const { location, minHeight, maxHeight, minCapacity, maxCapacity } = req.query;
+
+    // Construire le filtre de recherche
+    const filter = {};
+
+    if (location) {
+      filter.location = location;
+    }
+    if (minHeight) {
+      filter.height = { ...filter.height, $gte: Number(minHeight) };
+    }
+    if (maxHeight) {
+      filter.height = { ...filter.height, $lte: Number(maxHeight) };
+    }
+    if (minCapacity) {
+      filter.capacity = { ...filter.capacity, $gte: Number(minCapacity) };
+    }
+    if (maxCapacity) {
+      filter.capacity = { ...filter.capacity, $lte: Number(maxCapacity) };
+    }
+
+    const parks = await Park.find(filter);
+    res.status(200).send(parks);
   } catch (err) {
-    next(err); // Gestion de l'erreur avec try/catch
+    next(err);
   }
 });
+
+// router.get("/", authenticate, async function (req, res, next) {
+//   try {
+//     const parkings = await Park.find().exec(); // Utilisation de await sans callback
+//     res.status(200).send(parkings);
+//   } catch (err) {
+//     next(err); // Gestion de l'erreur avec try/catch
+//   }
+// });
 
 /**
  * @api {get} /parks/:id Get park by ID

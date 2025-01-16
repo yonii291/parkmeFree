@@ -59,9 +59,10 @@ const router = express.Router();
  */
 
 // Get all parks - ok
-router.get('/', authenticate, async (req, res, next) => {
+router.get("/", authenticate, async (req, res, next) => {
   try {
-    const { location, minHeight, maxHeight, minCapacity, maxCapacity } = req.query;
+    const { location, minHeight, maxHeight, minCapacity, maxCapacity } =
+      req.query;
 
     // Construire le filtre de recherche
     const filter = {};
@@ -138,6 +139,11 @@ router.get('/', authenticate, async (req, res, next) => {
  *     {
  *       "message": "Park not found"
  *     }
+ * @apiErrorExample {json} Error-Response (500):
+ *     HTTP/1.1 500 Internal Server Error
+ *     {
+ *       "message": "An error occurred while fetching the park."
+ *     }
  */
 
 // Get park by ID - ok
@@ -198,6 +204,11 @@ router.get("/:id", authenticate, async (req, res, next) => {
  *     HTTP/1.1 401 Unauthorized
  *     {
  *       "message": "User not authorized to create a park"
+ *     }
+ * @apiErrorExample {json} Error-Response (500):
+ *     HTTP/1.1 500 Internal Server Error
+ *     {
+ *       "message": "An error occurred while creating the park."
  *     }
  */
 
@@ -272,6 +283,11 @@ router.post("/create", authenticate, async (req, res) => {
  *     {
  *       "message": "Park not found"
  *     }
+ * @apiErrorExample {json} Error-Response (500):
+ *     HTTP/1.1 500 Internal Server Error
+ *     {
+ *       "message": "An error occurred while updating the park."
+ *     }
  */
 
 // Update a park by ID - ok
@@ -330,6 +346,11 @@ router.put("/:id", authenticate, async (req, res, next) => {
  *     HTTP/1.1 404 Not Found
  *     {
  *       "message": "Park not found"
+ *     }
+ * @apiErrorExample {json} Error-Response (500):
+ *     HTTP/1.1 500 Internal Server Error
+ *     {
+ *       "message": "An error occurred while deleting the park."
  *     }
  */
 

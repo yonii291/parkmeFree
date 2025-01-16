@@ -92,6 +92,11 @@ router.get("/", async (req, res, next) => {
  *     {
  *       "message": "Parking session not found"
  *     }
+ * @apiErrorExample {json} Error-Response (500):
+ *     HTTP/1.1 500 Internal Server Error
+ *     {
+ *       "message": "An error occurred while fetching the parking session."
+ *     }
  */
 
 // Get parking session by ID - ok
@@ -149,6 +154,11 @@ router.get("/:id", async (req, res, next) => {
  *     HTTP/1.1 401 Unauthorized
  *     {
  *       "message": "User not authorized to create a parking session"
+ *     }
+ * @apiErrorExample {json} Error-Response (500):
+ *     HTTP/1.1 500 Internal Server Error
+ *     {
+ *       "message": "An error occurred while creating the parking session."
  *     }
  */
 
@@ -211,6 +221,11 @@ router.post("/", authenticate, async (req, res, next) => {
  *     {
  *       "message": "Parking session not found"
  *     }
+ * @apiErrorExample {json} Error-Response (500):
+ *     HTTP/1.1 500 Internal Server Error
+ *     {
+ *       "message": "An error occurred while updating the parking session."
+ *     }
  */
 
 // Update parking session by ID - ok
@@ -270,6 +285,11 @@ router.put("/:id", authenticate, async (req, res, next) => {
  *     HTTP/1.1 404 Not Found
  *     {
  *       "message": "Parking session not found"
+ *     }
+ * @apiErrorExample {json} Error-Response (500):
+ *     HTTP/1.1 500 Internal Server Error
+ *     {
+ *       "message": "An error occurred while deleting the parking session."
  *     }
  */
 

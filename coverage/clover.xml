@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1736512032139" clover="3.2.0">
-  <project timestamp="1736512032139" name="All files">
-    <metrics statements="258" coveredstatements="128" conditionals="66" coveredconditionals="14" methods="50" coveredmethods="18" elements="374" coveredelements="160" complexity="0" loc="258" ncloc="258" packages="6" files="18" classes="18"/>
+<coverage generated="1737050820608" clover="3.2.0">
+  <project timestamp="1737050820608" name="All files">
+    <metrics statements="257" coveredstatements="128" conditionals="66" coveredconditionals="14" methods="48" coveredmethods="18" elements="371" coveredelements="160" complexity="0" loc="257" ncloc="257" packages="6" files="18" classes="18"/>
     <package name="parkmeFree">
       <metrics statements="22" coveredstatements="20" conditionals="6" coveredconditionals="4" methods="4" coveredmethods="2"/>
       <file name="app.js" path="C:\Users\Prêt maintenant\Desktop\M51-cours\semestre 5\ArchiOWeb\parkmeFree\app.js">
@@ -53,11 +53,11 @@
       <metrics statements="20" coveredstatements="14" conditionals="18" coveredconditionals="0" methods="8" coveredmethods="2"/>
       <file name="Car.js" path="C:\Users\Prêt maintenant\Desktop\M51-cours\semestre 5\ArchiOWeb\parkmeFree\model\Car.js">
         <metrics statements="5" coveredstatements="5" conditionals="0" coveredconditionals="0" methods="1" coveredmethods="1"/>
-        <line num="5" count="2" type="stmt"/>
-        <line num="35" count="2" type="stmt"/>
-        <line num="42" count="7" type="stmt"/>
-        <line num="43" count="7" type="stmt"/>
-        <line num="45" count="2" type="stmt"/>
+        <line num="4" count="2" type="stmt"/>
+        <line num="34" count="2" type="stmt"/>
+        <line num="40" count="7" type="stmt"/>
+        <line num="41" count="7" type="stmt"/>
+        <line num="43" count="2" type="stmt"/>
       </file>
       <file name="Park.js" path="C:\Users\Prêt maintenant\Desktop\M51-cours\semestre 5\ArchiOWeb\parkmeFree\model\Park.js">
         <metrics statements="5" coveredstatements="2" conditionals="9" coveredconditionals="0" methods="3" coveredmethods="0"/>
@@ -85,7 +85,7 @@
       </file>
     </package>
     <package name="parkmeFree.routes">
-      <metrics statements="177" coveredstatements="68" conditionals="34" coveredconditionals="6" methods="30" coveredmethods="8"/>
+      <metrics statements="176" coveredstatements="68" conditionals="34" coveredconditionals="6" methods="28" coveredmethods="8"/>
       <file name="cars.js" path="C:\Users\Prêt maintenant\Desktop\M51-cours\semestre 5\ArchiOWeb\parkmeFree\routes\cars.js">
         <metrics statements="35" coveredstatements="14" conditionals="6" coveredconditionals="1" methods="5" coveredmethods="2"/>
         <line num="4" count="2" type="stmt"/>
@@ -131,12 +131,12 @@
         <line num="22" count="0" type="stmt"/>
       </file>
       <file name="login.js" path="C:\Users\Prêt maintenant\Desktop\M51-cours\semestre 5\ArchiOWeb\parkmeFree\routes\login.js">
-        <metrics statements="20" coveredstatements="3" conditionals="8" coveredconditionals="0" methods="5" coveredmethods="0"/>
+        <metrics statements="19" coveredstatements="3" conditionals="8" coveredconditionals="0" methods="3" coveredmethods="0"/>
         <line num="7" count="2" type="stmt"/>
         <line num="9" count="2" type="stmt"/>
-        <line num="39" count="2" type="stmt"/>
-        <line num="40" count="0" type="stmt"/>
-        <line num="41" count="0" type="stmt"/>
+        <line num="41" count="2" type="stmt"/>
+        <line num="42" count="0" type="stmt"/>
+        <line num="43" count="0" type="stmt"/>
         <line num="44" count="0" type="cond" truecount="0" falsecount="2"/>
         <line num="45" count="0" type="stmt"/>
         <line num="48" count="0" type="stmt"/>
@@ -144,14 +144,13 @@
         <line num="50" count="0" type="stmt"/>
         <line num="51" count="0" type="cond" truecount="0" falsecount="2"/>
         <line num="52" count="0" type="stmt"/>
-        <line num="55" count="0" type="stmt"/>
         <line num="56" count="0" type="stmt"/>
         <line num="57" count="0" type="stmt"/>
-        <line num="58" count="0" type="cond" truecount="0" falsecount="2"/>
-        <line num="59" count="0" type="stmt"/>
-        <line num="61" count="0" type="stmt"/>
-        <line num="66" count="0" type="stmt"/>
-        <line num="69" count="0" type="stmt"/>
+        <line num="58" count="0" type="stmt"/>
+        <line num="59" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="60" count="0" type="stmt"/>
+        <line num="64" count="0" type="stmt"/>
+        <line num="68" count="0" type="stmt"/>
       </file>
       <file name="notifications.js" path="C:\Users\Prêt maintenant\Desktop\M51-cours\semestre 5\ArchiOWeb\parkmeFree\routes\notifications.js">
         <metrics statements="9" coveredstatements="2" conditionals="4" coveredconditionals="0" methods="1" coveredmethods="0"/>

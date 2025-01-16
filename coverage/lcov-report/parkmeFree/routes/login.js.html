@@ -23,9 +23,9 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">15% </span>
+                <span class="strong">15.78% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>3/20</span>
+                <span class='fraction'>3/19</span>
             </div>
         
             
@@ -39,14 +39,14 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/5</span>
+                <span class='fraction'>0/3</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">15% </span>
+                <span class="strong">15.78% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>3/20</span>
+                <span class='fraction'>3/19</span>
             </div>
         
             
@@ -135,8 +135,7 @@
 <a name='L70'></a><a href='#L70'>70</a>
 <a name='L71'></a><a href='#L71'>71</a>
 <a name='L72'></a><a href='#L72'>72</a>
-<a name='L73'></a><a href='#L73'>73</a>
-<a name='L74'></a><a href='#L74'>74</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L73'></a><a href='#L73'>73</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -174,11 +173,11 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -190,18 +189,17 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -230,11 +228,13 @@ const secretKey = config.jwtSecret;
  * @apiBody {String} password User's password (required).
  *
  * @apiSuccess {String} token JWT token for the authenticated user.
+ * @apiSuccess {String} id User's unique ID.
  *
  * @apiSuccessExample {json} Success-Response:
  *     HTTP/1.1 200 OK
  *     {
- *       "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+ *       "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...",
+ *       "id": "60c72b2f9af1b8b9b0f9a1b5"
  *     }
  *
  * @apiError (401) Unauthorized Invalid email or password.
@@ -249,35 +249,32 @@ const secretKey = config.jwtSecret;
 &nbsp;
 router.post("/", <span class="fstat-no" title="function not covered" >as</span>ync (req, res) =&gt; {
 <span class="cstat-no" title="statement not covered" >  try {</span>
-<span class="cstat-no" title="statement not covered" >    await User.findOne({ email: req.body.email })</span>
-      .then(<span class="fstat-no" title="function not covered" >(u</span>ser) =&gt; {
-        //Si pas d'utilisateur
-<span class="cstat-no" title="statement not covered" >        if (!user) {</span>
-<span class="cstat-no" title="statement not covered" >          return res.sendStatus(401).send({ message: "User not found" });</span>
+    const user = <span class="cstat-no" title="statement not covered" >await User.findOne({ email: req.body.email });</span>
+<span class="cstat-no" title="statement not covered" >    if (!user) {</span>
+<span class="cstat-no" title="statement not covered" >      return res.status(401).send({ message: "User not found" });</span>
+    }
+&nbsp;
+<span class="cstat-no" title="statement not covered" >    bcrypt.compare(req.body.password, user.password, <span class="fstat-no" title="function not covered" >fu</span>nction (err, valid) {</span>
+<span class="cstat-no" title="statement not covered" >      if (err) {</span>
+<span class="cstat-no" title="statement not covered" >        return res.status(500).send({ message: "Error comparing passwords" });</span>
+      } else <span class="cstat-no" title="statement not covered" >if (!valid) {</span>
+<span class="cstat-no" title="statement not covered" >        return res.status(401).send({ message: "Invalid password" });</span>
+      }
+&nbsp;
+      // Generate a JWT token
+      const exp = <span class="cstat-no" title="statement not covered" >Math.floor(Date.now() / 1000) + 7 * 24 * 3600;</span> // Expires in 7 days
+      const payload = <span class="cstat-no" title="statement not covered" >{ sub: user._id.toString(), exp: exp };</span>
+<span class="cstat-no" title="statement not covered" >      jwt.sign(payload, secretKey, <span class="fstat-no" title="function not covered" >fu</span>nction (err, token) {</span>
+<span class="cstat-no" title="statement not covered" >        if (err) {</span>
+<span class="cstat-no" title="statement not covered" >          return res</span>
+            .status(500)
+            .send({ message: "Error generating the token" });
         }
-        //Validate the password with bcrypt
-<span class="cstat-no" title="statement not covered" >        bcrypt.compare(req.body.password, user.password, <span class="fstat-no" title="function not covered" >fu</span>nction (err, valid) {</span>
-<span class="cstat-no" title="statement not covered" >          if (err) {</span>
-<span class="cstat-no" title="statement not covered" >            return next(err);</span>
-          } else <span class="cstat-no" title="statement not covered" >if (!valid) {</span>
-<span class="cstat-no" title="statement not covered" >            return res.sendStatus(401);</span>
-          }
-          //Generate a valid JWT that expires in 7 days
-          const exp = <span class="cstat-no" title="statement not covered" >Math.floor(Date.now() / 1000) + 7 * 24 * 3600;</span>
-          const payload = <span class="cstat-no" title="statement not covered" >{ sub: user._id.toString(), exp: exp };</span>
-<span class="cstat-no" title="statement not covered" >          jwt.sign(payload, secretKey, <span class="fstat-no" title="function not covered" >fu</span>nction (err, token) {</span>
-<span class="cstat-no" title="statement not covered" >            if (err) {</span>
-<span class="cstat-no" title="statement not covered" >              return next(err);</span>
-            }
-<span class="cstat-no" title="statement not covered" >            res.status(200).send({ token: token });</span>
-          });
-        });
-      })
-      .catch(<span class="fstat-no" title="function not covered" >(e</span>rr) =&gt; {
-<span class="cstat-no" title="statement not covered" >        return next(err);</span>
+<span class="cstat-no" title="statement not covered" >        res.status(200).send({ token: token, id: user._id });</span>
       });
+    });
   } catch (error) {
-<span class="cstat-no" title="statement not covered" >    res.status(500).send(error.message);</span>
+<span class="cstat-no" title="statement not covered" >    res.status(500).send({ message: "Error logging in the user" });</span>
   }
 });
 &nbsp;
@@ -289,7 +286,7 @@ export default router;
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-01-10T12:27:12.086Z
+                at 2025-01-16T18:07:00.509Z
             </div>
         <script src="../../prettify.js"></script>
         <script>

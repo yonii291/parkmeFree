@@ -170,8 +170,10 @@ describe('DELETE /api/users/delete/', function () {
     })
 
     it('user should delete his own profile', async function () {
+        const token = await generateValidJwt(davidNor)
         const res = await supertest(app)
             .delete(`/api/users/delete/${davidNor._id}`)
+            .set('Authorization', `Bearer ${token}`)
             .expect(200)
             .expect('Content-Type', /json/);
         //Assertions

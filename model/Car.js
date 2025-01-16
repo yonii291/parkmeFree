@@ -1,14 +1,9 @@
 import mongoose, { Schema, model } from "mongoose";
 
-
 // create the car schema
 const carSchema = new mongoose.Schema({
     id: {
         type: mongoose.ObjectId
-    },
-    user_id: {
-            type: mongoose.ObjectId,
-            required: [true, 'You must provide a user_id!']
     },
     model: {
         type: String,
@@ -37,15 +32,14 @@ const carSchema = new mongoose.Schema({
 
 //Hide the _v to the api users
 carSchema.set("toJSON", {
-    transform: transformJsonCar
+  transform: transformJsonCar,
 });
 
-
 function transformJsonCar(doc, json, options) {
-    // Remove the _v from the generated JSON.
-    delete json.__v;
-    return json;
+  // Remove the _v from the generated JSON.
+  delete json.__v;
+  return json;
 }
-export const Car = model('Car', carSchema);
+export const Car = model("Car", carSchema);
 
 export default Car;

@@ -33,7 +33,7 @@ app.use(
   cors({
     origin: allowedOrigins,
     methods: ["GET", "POST", "PUT", "DELETE", "PATCH"], // Allowed HTTP methods
-    credentials: true, // If using cookies or authorization headers
+    allowedHeaders: ['Content-Type', 'Authorization'],
   })
 );
 

@@ -1,10 +1,9 @@
 import express from "express";
 import createError from "http-errors";
 import logger from "morgan";
-
 import indexRouter from "./routes/index.js";
-import { User }sRouter from "./routes/users.js";
-
+import usersRouter from "./routes/users.js";
+//{ User }
 const app = express();
 
 app.use(logger("dev"));

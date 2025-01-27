@@ -12,6 +12,8 @@ import notificationsRouter from "./routes/notifications.js";
 import mongoose from "mongoose";
 import cors from "cors";
 
+
+
 ///DATABASE CONNECTION
 mongoose
   .connect(process.env.DATABASE_URL || "mongodb://localhost/monApp", {})
@@ -21,14 +23,12 @@ mongoose
 const app = express();
 
 // Allow requests from frontend's Render URL
-const allowedOrigins = ['https://parkmefree-4y8d.onrender.com', 'http://localhost:5173'];
-app.use(
-  cors({
-    origin: allowedOrigins,
-    methods: ["GET", "POST", "PUT", "DELETE", "PATCH"], // Allowed HTTP methods
-    credentials: true, // If using cookies or authorization headers
-  })
-);
+const corsOptions = {
+  origin: "https://parkmefree-4y8d.onrender.com", "http://localhost:5173",
+  methods: ["GET", "POST", "PUT", "DELETE", "PATCH"], // Allowed HTTP methods
+  credentials: true, // If using cookies or authorization headers
+};
+app.use(cors(corsOptions));
 
 app.use("/documentation", express.static("documentation"));
 
@@ -62,4 +62,7 @@ app.use(function (err, req, res, next) {
   res.send(err.message);
 });
 
+app.listen(3000, () => {
+  console.log('Server is running on port 3000');
+});
 export default app;

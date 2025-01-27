@@ -90,7 +90,9 @@ router.post("/register", async (req, res, next) => {
         const payload = { sub: user._id.toString(), exp: exp };
         jwt.sign(payload, secretKey, function (err, token) {
           if (err) {
-            return res.status(500).send({ message: "Error generating the token" });
+            return res
+              .status(500)
+              .send({ message: "Error generating the token" });
           }
           res.status(201).send({ ...user._doc, token: token });
         });
@@ -147,7 +149,9 @@ router.post("/register", async (req, res, next) => {
 router.get("/", authenticate, async function (req, res, next) {
   // uniquement les admins peuvent voir tous les users
   if (!req.params.admin) {
-    return res.status(403).send({ message: "You are not authorized to perform this action" });
+    return res
+      .status(403)
+      .send({ message: "You are not authorized to perform this action" });
   }
   try {
     const users = await User.find(); // Utilisation de await sans callback
@@ -195,6 +199,11 @@ router.get("/", authenticate, async function (req, res, next) {
  *     HTTP/1.1 404 Not Found
  *     {
  *       "message": "User not found"
+ *     }
+ * @apiErrorExample {json} Error-Response (500):
+ *     HTTP/1.1 500 Internal Server Error
+ *     {
+ *       "message": "An error occurred while fetching the user."
  *     }
  */
 
@@ -259,6 +268,11 @@ router.get("/:id", authenticate, async (req, res, next) => {
  *     {
  *       "message": "User not found"
  *     }
+ * @apiErrorExample {json} Error-Response (500):
+ *     HTTP/1.1 500 Internal Server Error
+ *     {
+ *       "message": "An error occurred while updating the user."
+ *     }
  */
 
 // Update user by ID - ok
@@ -314,6 +328,11 @@ router.put("/update/:id", authenticate, async function (req, res, next) {
  *     HTTP/1.1 404 Not Found
  *     {
  *       "message": "User not found"
+ *     }
+ * @apiErrorExample {json} Error-Response (500):
+ *     HTTP/1.1 500 Internal Server Error
+ *     {
+ *       "message": "An error occurred while deleting the user."
  *     }
  */
 

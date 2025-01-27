@@ -22,15 +22,20 @@ mongoose
 
 const app = express();
 
-// Allow requests from frontend's Render URL
-const corsOptions = {
-  origin: "https://parkmefree-4y8d.onrender.com", "http://localhost:5173",
-  methods: ["GET", "POST", "PUT", "DELETE", "PATCH"], // Allowed HTTP methods
-  credentials: true, // If using cookies or authorization headers
-};
-app.use(cors(corsOptions));
-
 app.use("/documentation", express.static("documentation"));
+
+// Allow requests from frontend's Render URL
+const allowedOrigins = [
+  "https://parkmefree-4y8d.onrender.com",
+  "http://localhost:5173",
+];
+app.use(
+  cors({
+    origin: allowedOrigins,
+    methods: ["GET", "POST", "PUT", "DELETE", "PATCH"], // Allowed HTTP methods
+    credentials: true, // If using cookies or authorization headers
+  })
+);
 
 app.use(logger("dev"));
 app.use(express.json());

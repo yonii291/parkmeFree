@@ -30,6 +30,11 @@ const router = express.Router();
  *     {
  *       "error": "Token and message are required"
  *     }
+ * @apiErrorExample {json} Error-Response (500):
+ *     HTTP/1.1 500 Internal Server Error
+ *     {
+ *       "error": "An error occurred while sending the notification."
+ *     }
  */
 
 router.post("/send", async (req, res) => {

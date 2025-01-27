@@ -36,6 +36,11 @@ const secretKey = config.jwtSecret;
  *     {
  *       "message": "User not found"
  *     }
+ * @apiErrorExample {json} Error-Response (500):
+ *     HTTP/1.1 500 Internal Server Error
+ *     {
+ *       "message": "An error occurred while logging in."
+ *     }
  */
 
 router.post("/", async (req, res) => {

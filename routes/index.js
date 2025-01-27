@@ -16,6 +16,12 @@ const router = express.Router();
  *     "Bienvenue dans ParkMeFree!!"
  *
  * @apiError (500) InternalServerError An internal server error occurred.
+ *
+ * @apiErrorExample {json} Error-Response:
+ *     HTTP/1.1 500 Internal Server Error
+ *     {
+ *       "message": "An internal server error occurred."
+ *     }
  */
 
 router.get("/", function (req, res, next) {
